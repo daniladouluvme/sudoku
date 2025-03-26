@@ -1,0 +1,12 @@
+{
+  "server": {
+    "port": 3000
+  },
+  "database": {
+    "mongo": {
+      "host": "mongodb://localhost:27017/sudoku",
+      "user": "",
+      "password": ""
+    }
+  }
+}

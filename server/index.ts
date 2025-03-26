@@ -1,24 +1,17 @@
-import express, { json, urlencoded } from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+import config from "@config";
+import { connectDB } from "./database";
+import app from "./app";
+import { setupWebSocket } from "./websocket";
 
-const app = express();
-const port = 3000;
+const SERVER_PORT = config.server.port;
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Разрешаем фронтенду доступ
-    credentials: true, // ❗ Обязательно для отправки куков
-  })
-);
-app.use(json());
-app.use(cookieParser());
-app.use(urlencoded({ extended: true }));
+// Connecting to the database
+connectDB();
 
-app.get("/api", (req, res) => {
-  res.send("Hello client");
+// Configuring the http server
+const server = app.listen(SERVER_PORT, () => {
+  console.log(`Server running on port ${SERVER_PORT}`);
 });
 
-app.listen(port, () => {
-  console.log(`The server is running on http://localhost:${port}`);
-});
+// Configuring the WebSocket
+setupWebSocket(server);
