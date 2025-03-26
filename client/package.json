@@ -16,6 +16,7 @@
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@reduxjs/toolkit": "^2.6.1",
+    "@types/node": "^22.13.13",
     "dotenv": "^16.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
