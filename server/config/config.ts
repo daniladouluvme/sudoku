@@ -10,10 +10,18 @@ interface IServerConfig {
   port: number;
 }
 
+interface IEmailConfig {
+  service: string;
+  user: string;
+  pass: string;
+}
+
 interface IAppConfig {
   origings: string[];
+  jwtSecretKey: string;
   server: IServerConfig;
   database: IDatabaseConfig;
+  email: IEmailConfig;
 }
 
 export default config as IAppConfig & IConfig;

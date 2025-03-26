@@ -1,12 +1,17 @@
 {
   "server": {
-    "port": 3000
+    "port": 9999
   },
+  "origins": [""],
   "database": {
-    "mongo": {
-      "host": "mongodb://localhost:27017/sudoku",
-      "user": "",
-      "password": ""
-    }
+    "host": "",
+    "user": "",
+    "password": ""
+  },
+  "jwtSecretKey": "",
+  "email": {
+    "service": "",
+    "user": "",
+    "pass": ""
   }
 }

@@ -5,7 +5,7 @@ const DATABASE_URI = config.database.host;
 const DATABASE_USER = config.database.user;
 const DATABASE_PASSWORD = config.database.password;
 
-const connectDB = async () => {
+export const connectDatabase = async () => {
   try {
     const conn = await mongoose.connect(DATABASE_URI, {
       user: DATABASE_USER,
@@ -17,5 +17,3 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
-export { connectDB };

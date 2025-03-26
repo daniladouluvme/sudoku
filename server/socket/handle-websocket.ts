@@ -1,12 +1,10 @@
-import { WebSocketServer } from "ws";
 import { WebSocket } from "ws";
+import type { Server } from "ws";
 
-const clients = new Set<WebSocket>();
+export const handleWebSocket = (socket: Server) => {
+  const clients = new Set<WebSocket>();
 
-const setupWebSocket = (server: any) => {
-  const wss = new WebSocketServer({ server });
-
-  wss.on("connection", (ws) => {
+  socket.on("connection", (ws) => {
     clients.add(ws);
     console.log("New client connected");
 
@@ -25,8 +23,4 @@ const setupWebSocket = (server: any) => {
       console.log("Client disconnected");
     });
   });
-
-  return wss;
 };
-
-export { setupWebSocket };
