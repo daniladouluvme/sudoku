@@ -11,7 +11,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Home } from "./components/Home/Home.tsx";
 import { Authorization } from "./components/Authorization/Authorization.tsx";
 import { Login } from "./components/Authorization/components/Login.tsx";
-import { Register } from "./components/Authorization/components/Register.tsx";
+import { Register } from "./components/Authorization/components/Register/Register.tsx";
 
 const darkTheme = createTheme({
   palette: {

@@ -40,11 +40,14 @@ export const userRouter = (): Router => {
     try {
       const { login, email, password } = req.body;
 
-      const exist = await User.findOne({ $or: [{ login }, { email }] });
-      if (exist) return res.status(409).send();
+      const existByLogin = await User.findOne({ login });
+      if (existByLogin) return res.status(409).send({ login: true });
+
+      const existByEmail = await User.findOne({ email });
+      if (existByEmail) return res.status(409).send({ email: true });
 
       const hashedPassword = hashSync(password, 12);
-      const result = await User.create({
+      await User.create({
         login,
         password: hashedPassword,
         email,
@@ -73,27 +76,11 @@ export const userRouter = (): Router => {
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
-        if (err) console.log(err);
+        if (err) console.error(err);
         else console.log("Email sent: " + info.response);
       });
 
-      const token = sign(
-        { userId: result.id, role: "user" },
-        config.jwtSecretKey,
-        {
-          expiresIn: "1d",
-        }
-      );
-
-      res
-        .cookie("token", token, {
-          httpOnly: true,
-          maxAge: 864e5,
-          secure: false,
-          sameSite: "strict",
-        })
-        .status(201)
-        .json(result);
+      res.status(201).send();
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

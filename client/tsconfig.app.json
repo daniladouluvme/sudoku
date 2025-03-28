@@ -17,12 +17,14 @@
 
     /* Linting */
     "strict": true,
+    "strictNullChecks": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
     "paths": {
+      "@components/*": ["./src/components/*"],
       "@model/*": ["./src/models/*"],
       "@service/*": ["./src/services/*"],
       "@state/*": ["./src/state/*"],

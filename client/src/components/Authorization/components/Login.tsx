@@ -1,6 +1,6 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { PasswordField } from "./PasswordField";
+import { AuthorizationPasswordField } from "./AuthorizationPasswordField";
 
 interface Form {
   login: string;
@@ -30,7 +30,7 @@ export const Login = () => {
         onChange={(e) => setForm((p) => ({ ...p, login: e.target.value }))}
         variant="outlined"
       />
-      <PasswordField
+      <AuthorizationPasswordField
         label="Password"
         value={form.password}
         onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
