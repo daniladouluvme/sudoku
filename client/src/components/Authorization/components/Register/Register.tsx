@@ -8,17 +8,17 @@ import {
 import { SimpleBackdrop } from "@components/shared";
 import { useState } from "react";
 import { AuthorizationService } from "@service/authorization.service";
-import { useRegisterForm } from "./hooks/use-register-form";
-import { IRegisterForm } from "./models/register-form.model";
+import { IRegisterForm } from "../../models/register-form.model";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router";
+import { useRegisterForm } from "@components/Authorization/hooks/use-register-form";
 
 export const Register = () => {
+  const navigate = useNavigate();
   const [backdropState, setBackdropState] = useState<{
     loading?: boolean;
     error?: string;
-    message?: string;
   }>({});
-  const [showBackdrop, setShowBackdrop] = useState(false);
   const form = useRegisterForm({
     mode: "onChange",
   });
@@ -26,20 +26,15 @@ export const Register = () => {
 
   const handleRegister = (data: IRegisterForm) => {
     setBackdropState({ loading: true });
-    setShowBackdrop(true);
     new AuthorizationService()
       .register({
         login: data.login,
         email: data.email,
         password: data.password,
       })
-      .then(() => {
-        setBackdropState(() => ({
-          message: `Registration was successful. The confirmation email has been sent to ${data.email}`,
-          loading: false,
-        }));
-      })
+      .then((user) => navigate(`/authorization/verification/${user._id}`))
       .catch((error: AxiosError<{ login?: boolean; email?: boolean }>) => {
+        console.error(error);
         let errorMessage = "An unknown error occurred during registration";
         if (error.status === 409) {
           const { login, email } = error.response.data ?? {};
@@ -76,8 +71,8 @@ export const Register = () => {
       </form>
       <SimpleBackdrop
         {...backdropState}
-        open={showBackdrop}
-        close={() => setShowBackdrop(false)}
+        open={backdropState.loading || !!backdropState.error}
+        close={() => setBackdropState({})}
       />
     </>
   );

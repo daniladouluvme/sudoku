@@ -1,45 +1,43 @@
 import { Box, Button, TextField } from "@mui/material";
-import { AuthorizationPasswordField } from "./AuthorizationPasswordField";
 import { handleFieldError } from "../utils/handle-field-error";
-import { useLoginForm } from "../hooks/use-login-form";
+import { useNavigate, useParams } from "react-router";
+import { IEmailVerificationForm } from "../models/email-verification-form.model";
 import { useState } from "react";
 import { SimpleBackdrop } from "@components/shared";
 import { AuthorizationService } from "@service/authorization.service";
 import { useAppDispatch } from "@hooks/state";
 import { setUser } from "@state/slice/user-slice";
-import { AxiosError } from "axios";
-import { ILoginForm } from "../models/login-form.model";
+import { useEmailVerificationForm } from "../hooks/use-email-verification-form";
 
-export const Login = () => {
+export const EmailVerification = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [backdropState, setBackdropState] = useState<{
     loading?: boolean;
     error?: string;
   }>({});
+
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors },
-  } = useLoginForm({
+  } = useEmailVerificationForm({
     mode: "onChange",
   });
 
-  const handleLogin = (data: ILoginForm) => {
+  const handleVerify = (data: IEmailVerificationForm) => {
     setBackdropState({ loading: true });
     new AuthorizationService()
-      .login({
-        login: data.login,
-        password: data.password,
+      .verifyEmail({ userId, code: data.code })
+      .then((user) => {
+        dispatch(setUser(user));
+        navigate("/");
       })
-      .then((user) => dispatch(setUser(user)))
-      .catch((error: AxiosError<{ notFound?: boolean }>) => {
+      .catch((error) => {
         console.error(error);
-        let errorMessage = "An unknown error occurred during authorization";
-        if (error.status === 404) {
-          const { notFound } = error.response.data ?? {};
-          if (notFound) errorMessage = "The user was not found";
-        }
+        let errorMessage = "An unknown error occurred during verification";
 
         setBackdropState(() => ({ error: errorMessage, loading: false }));
       });
@@ -47,7 +45,7 @@ export const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(handleLogin)}>
+      <form onSubmit={handleSubmit(handleVerify)}>
         <Box
           sx={{
             display: "flex",
@@ -56,30 +54,22 @@ export const Login = () => {
           }}
         >
           <TextField
-            label="Login"
+            label="Code"
+            {...register("code", {
+              required: "Code required",
+            })}
+            {...handleFieldError("code", errors)}
             variant="outlined"
-            {...register("login", {
-              required: "Login required",
-            })}
-            {...handleFieldError("login", errors)}
-          />
-          <AuthorizationPasswordField
-            label="Password"
-            {...register("password", {
-              required: "Password required",
-            })}
-            {...handleFieldError("password", errors)}
           />
           <Button
             type="submit"
             variant="outlined"
             sx={{ alignSelf: "flex-end" }}
           >
-            Login
+            Verify
           </Button>
         </Box>
       </form>
-
       <SimpleBackdrop
         {...backdropState}
         open={backdropState.loading || !!backdropState.error}

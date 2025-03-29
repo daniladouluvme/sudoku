@@ -1,24 +1,31 @@
 import { Router } from "express";
 import { User } from "@dbmodel/user.model";
 import { compareSync, hashSync } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import { sign, decode } from "jsonwebtoken";
 import { createTransport } from "nodemailer";
 import config from "@config";
+import { Verification } from "@dbmodel/verification.model";
+import { generateVerificationCode } from "../../database/utils/generate-verification-code";
+import { verifyToken } from "../../database/utils/verify-toket";
 
 export const userRouter = (): Router => {
   const router = Router();
 
-  router.post("/login", async (req, res) => {
+  router.post("/login", async (req, res): Promise<any> => {
     const { login, password } = req.body;
-    const result = await User.findOne({ login });
+    const user = await User.findOne({ login });
 
-    if (!result || !compareSync(password, result.password ?? "")) {
-      res.status(401).send();
+    if (!user || !compareSync(password, user.password ?? "")) {
+      res.status(404).send({ notFound: true });
       return;
     }
 
+    if (!user.emailVerified) {
+      return res.status(201).send(user);
+    }
+
     const token = sign(
-      { userId: result.id, role: "user" },
+      { userId: user._id, role: "user" },
       config.jwtSecretKey,
       {
         expiresIn: "1d",
@@ -33,7 +40,7 @@ export const userRouter = (): Router => {
         sameSite: "strict",
       })
       .status(201)
-      .json(result);
+      .json(user);
   });
 
   router.post("/register", async (req, res): Promise<any> => {
@@ -47,11 +54,17 @@ export const userRouter = (): Router => {
       if (existByEmail) return res.status(409).send({ email: true });
 
       const hashedPassword = hashSync(password, 12);
-      await User.create({
+      const user = await User.create({
         login,
         password: hashedPassword,
         email,
         emailVerified: false,
+      });
+
+      const verification = await Verification.create({
+        user: user._id,
+        code: generateVerificationCode(),
+        validUntil: new Date(+new Date() + 9e5),
       });
 
       const transporter = createTransport({
@@ -64,15 +77,11 @@ export const userRouter = (): Router => {
         },
       });
 
-      const emailToken = sign({ email }, config.jwtSecretKey, {
-        expiresIn: "1h",
-      });
-
       const mailOptions = {
         from: config.email.user,
         to: email,
         subject: "Email Verification",
-        text: `To confirm the email, click on the following link: http://localhost:${config.server.port}/api/users/verification/${emailToken}`,
+        text: `Code: ${verification.code}`,
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
@@ -80,16 +89,59 @@ export const userRouter = (): Router => {
         else console.log("Email sent: " + info.response);
       });
 
-      res.status(201).send();
+      res.status(201).send(user);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   });
 
-  router.post("/register", async (req, res): Promise<any> => {
-    console.log(req.params);
-    res.send(req.params);
+  router.post("/verifyEmail", async (req, res): Promise<any> => {
+    const { userId, code } = req.body;
+    const verification = await Verification.findOne({
+      user: userId,
+      code,
+      validUntil: { $gte: new Date() },
+    });
+    if (!verification) return res.status(404).send();
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId },
+      { emailVerified: true },
+      { new: true }
+    );
+
+    const token = sign(
+      { userId: user?._id, role: "user" },
+      config.jwtSecretKey,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: 864e5,
+        secure: false,
+        sameSite: "strict",
+      })
+      .status(201)
+      .json(user);
+  });
+
+  router.post("/logout", (_, res) => {
+    res.clearCookie("token");
+    res.status(204).send();
+  });
+
+  router.post("/verify", verifyToken, async (req, res): Promise<any> => {
+    const token: string = req.cookies.token;
+    const payload = decode(token, { json: true });
+    const userId = payload?.userId;
+    if (!userId) return res.status(401).send();
+    const user = await User.findById(userId);
+    res.send(user);
   });
 
   return router;

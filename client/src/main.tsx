@@ -12,6 +12,10 @@ import { Home } from "./components/Home/Home.tsx";
 import { Authorization } from "./components/Authorization/Authorization.tsx";
 import { Login } from "./components/Authorization/components/Login.tsx";
 import { Register } from "./components/Authorization/components/Register/Register.tsx";
+import { EmailVerification } from "@components/Authorization/components/EmailVerification.tsx";
+import { Provider } from "react-redux";
+import { store } from "@state/store.ts";
+import { NotFound } from "@components/NotFound.tsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -21,19 +25,26 @@ const darkTheme = createTheme({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Routes>
-          <Route element={<App />}>
-            <Route index element={<Home />} />
-            <Route path="authorization" element={<Authorization />}>
-              <Route path="login" element={<Login />}></Route>
-              <Route path="register" element={<Register />}></Route>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Routes>
+            <Route element={<App />}>
+              <Route index element={<Home />} />
+              <Route path="authorization" element={<Authorization />}>
+                <Route path="login" element={<Login />}></Route>
+                <Route path="register" element={<Register />}></Route>
+                <Route
+                  path="verification/:userId"
+                  element={<EmailVerification />}
+                ></Route>
+              </Route>
+              <Route path="*" element={<NotFound />} />
             </Route>
-          </Route>
-        </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+          </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   </StrictMode>
 );
