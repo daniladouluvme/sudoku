@@ -6,10 +6,6 @@ export const logout = createAsyncThunk("posts/logout", async () => {
   await new AuthorizationService().logout();
 });
 
-export const verify = createAsyncThunk("posts/verify", async () => {
-  return await new AuthorizationService().verify();
-});
-
 const initialState: User = null;
 
 const userSlice = createSlice({
@@ -22,16 +18,6 @@ const userSlice = createSlice({
     builder
       .addCase(logout.fulfilled, () => null)
       .addCase(logout.rejected, (_, action) => {
-        console.error(action.error);
-        return null;
-      });
-
-    builder
-      .addCase(
-        verify.fulfilled,
-        (_, action: PayloadAction<User>) => action.payload
-      )
-      .addCase(verify.rejected, (_, action) => {
         console.error(action.error);
         return null;
       });

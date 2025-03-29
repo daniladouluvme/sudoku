@@ -1,5 +1,16 @@
-import { Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
 export const NotFound = () => (
-  <Typography variant="h3">Page not found</Typography>
+  <Box
+    sx={{
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: 'center'
+    }}
+  >
+    <Divider>
+      <Typography variant="h5">Page not found</Typography>
+    </Divider>
+  </Box>
 );

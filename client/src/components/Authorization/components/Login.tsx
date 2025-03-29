@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { AuthorizationPasswordField } from "./AuthorizationPasswordField";
 import { handleFieldError } from "../utils/handle-field-error";
 import { useLoginForm } from "../hooks/use-login-form";
@@ -55,6 +55,9 @@ export const Login = () => {
             rowGap: "0.5rem",
           }}
         >
+          <Divider>
+            <Typography variant="h5">Login</Typography>
+          </Divider>
           <TextField
             label="Login"
             variant="outlined"

@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import {
   EmailField,
   LoginField,
@@ -32,7 +32,7 @@ export const Register = () => {
         email: data.email,
         password: data.password,
       })
-      .then((user) => navigate(`/authorization/verification/${user._id}`))
+      .then((user) => navigate(`verification/${user._id}`))
       .catch((error: AxiosError<{ login?: boolean; email?: boolean }>) => {
         console.error(error);
         let errorMessage = "An unknown error occurred during registration";
@@ -56,6 +56,9 @@ export const Register = () => {
             rowGap: "0.5rem",
           }}
         >
+          <Divider>
+            <Typography variant="h5">Register</Typography>
+          </Divider>
           <LoginField {...form} />
           <EmailField {...form} />
           <PasswordField {...form} />

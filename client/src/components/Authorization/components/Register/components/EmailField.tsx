@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { handleFieldError } from "../../../utils/handle-field-error";
-import { useRegisterForm } from "../hooks/use-register-form";
+import { useRegisterForm } from "@components/Authorization/hooks/use-register-form";
 
 export const EmailField = ({
   register,

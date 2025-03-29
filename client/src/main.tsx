@@ -9,13 +9,18 @@ import { App } from "./components/App/App.tsx";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Home } from "./components/Home/Home.tsx";
-import { Authorization } from "./components/Authorization/Authorization.tsx";
 import { Login } from "./components/Authorization/components/Login.tsx";
 import { Register } from "./components/Authorization/components/Register/Register.tsx";
 import { EmailVerification } from "@components/Authorization/components/EmailVerification.tsx";
 import { Provider } from "react-redux";
 import { store } from "@state/store.ts";
 import { NotFound } from "@components/NotFound.tsx";
+import { Profile } from "@components/Profile/Profile.tsx";
+import { UserList } from "@components/UserList/UserList.tsx";
+import { UnauthorizedRoute } from "@components/ProtectedRoute/UnauthorizedRoute.tsx";
+import { AuthorizedRoute } from "@components/ProtectedRoute/AuthorizedRoute.tsx";
+import { LoadingRoute } from "@components/ProtectedRoute/LoadingRoute.tsx";
+import { Main } from "@components/Main/Main.tsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -31,16 +36,24 @@ createRoot(document.getElementById("root")!).render(
           <CssBaseline />
           <Routes>
             <Route element={<App />}>
-              <Route index element={<Home />} />
-              <Route path="authorization" element={<Authorization />}>
-                <Route path="login" element={<Login />}></Route>
-                <Route path="register" element={<Register />}></Route>
-                <Route
-                  path="verification/:userId"
-                  element={<EmailVerification />}
-                ></Route>
+              <Route element={<LoadingRoute />}>
+                <Route element={<Main />}>
+                  <Route index element={<Home />} />
+                  <Route element={<UnauthorizedRoute />}>
+                    <Route path="login" element={<Login />}></Route>
+                    <Route path="register" element={<Register />}></Route>
+                    <Route
+                      path="verification/:userId"
+                      element={<EmailVerification />}
+                    />
+                  </Route>
+                  <Route element={<AuthorizedRoute />}>
+                    <Route path="profile/:userId" element={<Profile />} />
+                    <Route path="users" element={<UserList />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Route>
               </Route>
-              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </ThemeProvider>

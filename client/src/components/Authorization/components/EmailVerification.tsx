@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { handleFieldError } from "../utils/handle-field-error";
 import { useNavigate, useParams } from "react-router";
 import { IEmailVerificationForm } from "../models/email-verification-form.model";
@@ -53,6 +53,9 @@ export const EmailVerification = () => {
             rowGap: "0.5rem",
           }}
         >
+          <Divider>
+            <Typography variant="h5">Email verification</Typography>
+          </Divider>
           <TextField
             label="Code"
             {...register("code", {

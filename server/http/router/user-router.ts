@@ -6,10 +6,11 @@ import { createTransport } from "nodemailer";
 import config from "@config";
 import { Verification } from "@dbmodel/verification.model";
 import { generateVerificationCode } from "../../database/utils/generate-verification-code";
-import { verifyToken } from "../../database/utils/verify-toket";
+import { verifyToken } from "../../database/utils/verify-token";
+import { createRestApiRouter } from "./create-rest-api-router";
 
 export const userRouter = (): Router => {
-  const router = Router();
+  const router = createRestApiRouter(User);
 
   router.post("/login", async (req, res): Promise<any> => {
     const { login, password } = req.body;
@@ -83,13 +84,16 @@ export const userRouter = (): Router => {
         subject: "Email Verification",
         text: `Code: ${verification.code}`,
       };
-
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) console.error(err);
-        else console.log("Email sent: " + info.response);
+      
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          res.status(500).send(error);
+        } else {
+          console.log("Email sent: " + info.response);
+          res.status(201).send(user);
+        }
       });
-
-      res.status(201).send(user);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

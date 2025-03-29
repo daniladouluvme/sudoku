@@ -1,6 +1,7 @@
-import { AppBar, Container, Toolbar } from "@mui/material";
-import { Link } from "./components/Link";
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import { ProfileMenu } from "./components/ProfileMenu/ProfileMenu";
+import { MainMenu } from "./components/MainMenu/MainMenu";
+import { Link } from "react-router";
 
 export const Header = () => {
   return (
@@ -12,11 +13,20 @@ export const Header = () => {
           sx={{
             display: "flex",
             columnGap: "10px",
+            justifyContent: "space-between",
           }}
         >
-          <Link to="/">home</Link>
-
-          <ProfileMenu sx={{ marginLeft: "auto" }} />
+          <MainMenu />
+          <Typography
+            component={Link}
+            to="/"
+            variant="h4"
+            color="inherit"
+            sx={{ textDecoration: "none" }}
+          >
+            Sudoku
+          </Typography>
+          <ProfileMenu />
         </Toolbar>
       </Container>
     </AppBar>

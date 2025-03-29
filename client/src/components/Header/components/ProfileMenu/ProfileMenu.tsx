@@ -8,11 +8,9 @@ import {
 import { MouseEvent, useState } from "react";
 import { MenuItemLink } from "../MenuItemLink";
 import { useAppDispatch, useAppSelector } from "@hooks/state";
-import { useNavigate } from "react-router";
 import { logout } from "@state/slice/user-slice";
 
 export const ProfileMenu = (props: IconButtonOwnProps) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [anchor, setAnchor] = useState<HTMLElement>(null);
   const user = useAppSelector((s) => s.user);
@@ -22,15 +20,12 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
   };
 
   const handleClose = () => setAnchor(null);
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
+  const handleLogout = () => dispatch(logout());
 
   return (
     <>
       <IconButton {...props} size="medium" onClick={handleClick}>
-        <Avatar />
+        <Avatar sx={{ width: 24, height: 24 }} />
       </IconButton>
 
       <Menu
@@ -41,7 +36,7 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
       >
         {user
           ? [
-              <MenuItemLink key={1} to="profile">
+              <MenuItemLink key={1} to={`profile/${user._id}`}>
                 Profile
               </MenuItemLink>,
               <MenuItem key={2} onClick={handleLogout}>
@@ -49,10 +44,10 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
               </MenuItem>,
             ]
           : [
-              <MenuItemLink key={1} to="authorization/login">
+              <MenuItemLink key={1} to="login">
                 Login
               </MenuItemLink>,
-              <MenuItemLink key={2} to="authorization/register">
+              <MenuItemLink key={2} to="register">
                 Register
               </MenuItemLink>,
             ]}
