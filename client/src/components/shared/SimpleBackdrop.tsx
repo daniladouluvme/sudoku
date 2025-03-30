@@ -23,7 +23,10 @@ export const SimpleBackdrop = ({
     {loading ? (
       <CircularProgress color="inherit" />
     ) : (
-      <Alert severity={message ? "success" : "error"}>{message || error}</Alert>
+      <>
+        {message && <Alert severity={"success"}>{message}</Alert>}
+        {error && <Alert severity={"error"}>{error}</Alert>}
+      </>
     )}
   </Backdrop>
 );

@@ -25,6 +25,8 @@
 
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@context/*": ["./src/context/*"],
+      "@providers/*": ["./src/providers/*"],
       "@model/*": ["./src/models/*"],
       "@service/*": ["./src/services/*"],
       "@state/*": ["./src/state/*"],

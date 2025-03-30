@@ -8,7 +8,7 @@ import {
 import { MouseEvent, useState } from "react";
 import { MenuItemLink } from "../MenuItemLink";
 import { useAppDispatch, useAppSelector } from "@hooks/state";
-import { logout } from "@state/slice/user-slice";
+import { logout } from "@state/slice/user.slice";
 
 export const ProfileMenu = (props: IconButtonOwnProps) => {
   const dispatch = useAppDispatch();

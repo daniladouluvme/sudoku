@@ -1,1 +1,1 @@
-export * from "./SimpleBacdrop";
+export * from "./SimpleBackdrop";

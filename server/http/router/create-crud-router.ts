@@ -3,10 +3,7 @@ import { isObject } from "lodash";
 import type { Model } from "mongoose";
 import { verifyToken } from "../../database/utils/verify-token";
 
-export const createRestApiRouter = (
-  model: Model<any>,
-  options?: RestApiOptions
-) => {
+export const createCrudRouter = (model: Model<any>, options?: CrudOptions) => {
   const router = Router();
 
   if (!options || options.get) {
@@ -62,7 +59,7 @@ export const createRestApiRouter = (
   }
 
   if (!options || options.patch) {
-    router.put(
+    router.patch(
       "/:id",
       ...generateRequestHandlers(options?.get),
       async (req, res) => {
@@ -102,25 +99,23 @@ export const createRestApiRouter = (
   return router;
 };
 
-const generateRequestHandlers = (
-  options?: RestApiPathType
-): RequestHandler[] => {
+const generateRequestHandlers = (options?: CrudPathType): RequestHandler[] => {
   const handlers: RequestHandler[] = [];
   if (isObject(options)) handlers.push(...options.requestHandlers);
   else handlers.push(verifyToken);
   return handlers;
 };
 
-interface RestApiOptions {
-  get?: RestApiPathType;
-  post?: RestApiPathType;
-  put?: RestApiPathType;
-  patch?: RestApiPathType;
-  delete?: RestApiPathType;
+interface CrudOptions {
+  get?: CrudPathType;
+  post?: CrudPathType;
+  put?: CrudPathType;
+  patch?: CrudPathType;
+  delete?: CrudPathType;
 }
 
-type RestApiPathType = boolean | RestApiPathOptions;
+type CrudPathType = boolean | CrudPathOptions;
 
-interface RestApiPathOptions {
+interface CrudPathOptions {
   requestHandlers: RequestHandler[];
 }

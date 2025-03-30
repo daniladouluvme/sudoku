@@ -1,3 +1,4 @@
+import { useService } from "@hooks/use-service";
 import { User } from "@model/user.model";
 import {
   Avatar,
@@ -7,22 +8,22 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import { UserService } from "@service/user.serivce";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
-const userS = new UserService();
-
 export const UserList = () => {
+  const { userService } = useService();
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    userS.get().then((users) => setUsers(users.filter((u) => u.emailVerified)));
+    userService
+      .get()
+      .then((users) => setUsers(users.filter((u) => u.emailVerified)));
   }, []);
 
   return (
     <Box>
-      <List >
+      <List>
         {users.map((u) => (
           <ListItemButton
             key={u._id}

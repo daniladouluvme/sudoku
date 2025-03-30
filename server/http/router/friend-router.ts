@@ -1,8 +1,8 @@
-import { createRestApiRouter } from "./create-rest-api-router";
+import { createCrudRouter } from "./create-crud-router";
 import { Friend } from "@dbmodel/friend.model";
 
 export const friendRouter = () => {
-  const router = createRestApiRouter(Friend, {
+  const router = createCrudRouter(Friend, {
     get: true,
     post: true,
     delete: true,

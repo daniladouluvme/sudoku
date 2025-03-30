@@ -10,16 +10,23 @@ const friendRequestSlice = createSlice({
     setFriendRequests: (_, action: PayloadAction<FriendRequest[]>) =>
       action.payload,
     addFriendRequest: (state, action: PayloadAction<FriendRequest>) => {
-      state.push(action.payload);
+      if (!state.some((fr) => fr._id === action.payload._id)) {
+        state.push(action.payload);
+      }
     },
-    declineFriendRequest: (state, action: PayloadAction<string>) => {
-      const frienRequest = state.find((fr) => fr._id === action.payload);
-      frienRequest.declined = true;
+    updateFriendRequest: (state, action: PayloadAction<FriendRequest>) => {
+      const i = state.findIndex((fr) => fr._id === action.payload._id);
+      if (i !== -1) state[i] = action.payload;
     },
-    removeFriendRequest: (state, action: PayloadAction<string>) =>
+    deleteFriendRequest: (state, action: PayloadAction<string>) =>
       state.filter((fr) => fr._id !== action.payload),
   },
 });
 
 export default friendRequestSlice.reducer;
-export const { setFriendRequests } = friendRequestSlice.actions;
+export const {
+  setFriendRequests,
+  addFriendRequest,
+  updateFriendRequest,
+  deleteFriendRequest,
+} = friendRequestSlice.actions;

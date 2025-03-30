@@ -1,8 +1,8 @@
 import { FriendRequest } from "@dbmodel/friend-request.model";
-import { createRestApiRouter } from "./create-rest-api-router";
+import { createCrudRouter } from "./create-crud-router";
 
 export const friendRequestRouter = () => {
-  const router = createRestApiRouter(FriendRequest, {
+  const router = createCrudRouter(FriendRequest, {
     get: true,
     post: true,
     patch: true,

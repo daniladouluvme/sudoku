@@ -6,7 +6,7 @@ export const NotFound = () => (
       height: "100%",
       display: "flex",
       flexDirection: "column",
-      justifyContent: 'center'
+      justifyContent: "center",
     }}
   >
     <Divider>

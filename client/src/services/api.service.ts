@@ -14,12 +14,12 @@ export class ApiService<T> {
     return await axios.post(this.url, body).then((res) => res.data);
   }
 
-  public async put(body: Partial<T>): Promise<T> {
-    return await axios.put(this.url, body).then((res) => res.data);
+  public async put(id: string, body: Partial<T>): Promise<T> {
+    return await axios.put(`${this.url}/${id}`, body).then((res) => res.data);
   }
 
-  public async patch(body: Partial<T>): Promise<T> {
-    return await axios.patch(this.url, body).then((res) => res.data);
+  public async patch(id: string, body: Partial<T>): Promise<T> {
+    return await axios.patch(`${this.url}/${id}`, body).then((res) => res.data);
   }
 
   public async delete(id: string): Promise<T> {

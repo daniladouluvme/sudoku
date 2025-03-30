@@ -21,6 +21,7 @@ import { UnauthorizedRoute } from "@components/ProtectedRoute/UnauthorizedRoute.
 import { AuthorizedRoute } from "@components/ProtectedRoute/AuthorizedRoute.tsx";
 import { LoadingRoute } from "@components/ProtectedRoute/LoadingRoute.tsx";
 import { Main } from "@components/Main/Main.tsx";
+import { ServiceProvider } from "@providers/service.provider.tsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -31,33 +32,35 @@ const darkTheme = createTheme({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <Routes>
-            <Route element={<App />}>
-              <Route element={<LoadingRoute />}>
-                <Route element={<Main />}>
-                  <Route index element={<Home />} />
-                  <Route element={<UnauthorizedRoute />}>
-                    <Route path="login" element={<Login />}></Route>
-                    <Route path="register" element={<Register />}></Route>
-                    <Route
-                      path="verification/:userId"
-                      element={<EmailVerification />}
-                    />
+      <ServiceProvider>
+        <BrowserRouter>
+          <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <Routes>
+              <Route element={<App />}>
+                <Route element={<LoadingRoute />}>
+                  <Route element={<Main />}>
+                    <Route index element={<Home />} />
+                    <Route element={<UnauthorizedRoute />}>
+                      <Route path="login" element={<Login />}></Route>
+                      <Route path="register" element={<Register />}></Route>
+                      <Route
+                        path="verification/:userId"
+                        element={<EmailVerification />}
+                      />
+                    </Route>
+                    <Route element={<AuthorizedRoute />}>
+                      <Route path="profile/:userId" element={<Profile />} />
+                      <Route path="users" element={<UserList />} />
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
                   </Route>
-                  <Route element={<AuthorizedRoute />}>
-                    <Route path="profile/:userId" element={<Profile />} />
-                    <Route path="users" element={<UserList />} />
-                  </Route>
-                  <Route path="*" element={<NotFound />} />
                 </Route>
               </Route>
-            </Route>
-          </Routes>
-        </ThemeProvider>
-      </BrowserRouter>
+            </Routes>
+          </ThemeProvider>
+        </BrowserRouter>
+      </ServiceProvider>
     </Provider>
   </StrictMode>
 );
