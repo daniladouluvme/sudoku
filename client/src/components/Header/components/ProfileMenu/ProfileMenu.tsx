@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   IconButton,
   IconButtonOwnProps,
   Menu,
@@ -14,6 +15,10 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
   const dispatch = useAppDispatch();
   const [anchor, setAnchor] = useState<HTMLElement>(null);
   const user = useAppSelector((s) => s.user);
+  const friendRequests = useAppSelector((s) => s.friendRequests);
+  const notifications = friendRequests.filter(
+    (fr) => fr.to === user?._id
+  ).length;
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setAnchor(e.currentTarget);
@@ -25,7 +30,13 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
   return (
     <>
       <IconButton {...props} size="medium" onClick={handleClick}>
-        <Avatar sx={{ width: 24, height: 24 }} />
+        <Badge
+          badgeContent={notifications}
+          invisible={!notifications}
+          color="error"
+        >
+          <Avatar sx={{ width: 24, height: 24 }} />
+        </Badge>
       </IconButton>
 
       <Menu

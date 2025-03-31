@@ -1,51 +1,71 @@
 import { setUser } from "@state/slice/user.slice";
-import { useAppDispatch } from "./state";
-import { AuthorizationService } from "@service/authorization.service";
-import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./state";
+import { useEffect, useState } from "react";
 import { setLoading } from "@state/slice/loading.slice";
-import { FriendRequestService } from "@service/friend-request.service";
 import { setFriendRequests } from "@state/slice/friend-request.slice";
-import { User } from "@model/user.model";
 import { setFriends } from "@state/slice/friend.slice";
-import { FriendService } from "@service/friend.service";
-
-const authorizationS = new AuthorizationService();
-const friendRequestS = new FriendRequestService();
-const friendS = new FriendService();
+import { useService } from "./use-service";
+import { usePrevious } from "./use-previous";
 
 export const useInit = () => {
+  const { authorizationService, friendRequestService, friendService } =
+    useService();
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((s) => s.user);
+  const prevUser = usePrevious(currentUser);
 
-  const initAplication = async () => {
-    let user: User;
-    try {
-      user = await authorizationS.verify();
-      dispatch(setUser(user));
-    } catch (error) {
-      console.error(error);
-      return dispatch(setLoading(false));
-    }
+  const [isVerificationEnded, setIsVerificationEnded] = useState(false);
 
-    try {
-      const friendRequests = await friendRequestS.getUserFriendRequests(
-        user._id
-      );
-      dispatch(setFriendRequests(friendRequests));
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    initUser();
+  }, []);
 
-    try {
-      const friends = await friendS.getUserFriends(user._id);
-      dispatch(setFriends(friends));
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    isVerificationEnded && initData();
+  }, [currentUser]);
 
+  const initData = async () => {
+    await initFriendRequests();
+    await initFriends();
     dispatch(setLoading(false));
   };
 
-  useEffect(() => {
-    initAplication();
-  }, []);
+  const initUser = async () => {
+    try {
+      const user = await authorizationService.verify();
+      dispatch(setUser(user));
+    } catch (error) {
+      console.error(error);
+      dispatch(setLoading(false));
+    }
+    setIsVerificationEnded(true);
+  };
+
+  const initFriendRequests = async () => {
+    if (currentUser && currentUser._id !== prevUser?._id) {
+      try {
+        const friendRequests = await friendRequestService.getUserFriendRequests(
+          currentUser._id
+        );
+        dispatch(setFriendRequests(friendRequests));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      dispatch(setFriendRequests([]));
+    }
+  };
+
+  const initFriends = async () => {
+    if (currentUser && currentUser._id !== prevUser?._id) {
+      try {
+        const friends = await friendService.getUserFriends(currentUser._id);
+        dispatch(setFriends(friends));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      dispatch(setFriends([]));
+    }
+  };
 };
