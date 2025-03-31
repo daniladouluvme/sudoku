@@ -1,20 +1,20 @@
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { FriendRequest } from "@model/friend-request.model";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, IconButtonProps, Tooltip } from "@mui/material";
 import { useFriend } from "@hooks/use-friend";
 
 interface Props {
   friendRequest: FriendRequest;
 }
 
-export const AddFriendButton = ({ friendRequest }: Props) => {
+export const AddFriendButton = (props: Props & IconButtonProps) => {
   const { acceptFriendRequest } = useFriend();
 
-  const handleClick = () => acceptFriendRequest(friendRequest);
+  const handleClick = () => acceptFriendRequest(props.friendRequest);
 
   return (
     <Tooltip title="Accept friend request">
-      <IconButton size="medium" onClick={handleClick}>
+      <IconButton sx={props.sx} size="medium" onClick={handleClick}>
         <PersonAddIcon />
       </IconButton>
     </Tooltip>

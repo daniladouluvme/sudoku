@@ -1,19 +1,19 @@
 import { useAppSelector } from "@hooks/state";
 import { User } from "@model/user.model";
-import { CancelFriendRequestButton } from "./CancelFriendRequestButton";
-import { FriendRequestButton } from "./FriendRequestButton";
-import { AddFriendButton } from "./AddFriendButton";
-import { DeclineFriendRequestButton } from "./DeclineFriendRequestButton";
-import { DeleteFriendButton } from "./DeleteFriendButton";
+import { CancelFriendRequestButton } from "./components/CancelFriendRequestButton";
+import { FriendRequestButton } from "./components/FriendRequestButton";
+import { AddFriendButton } from "./components/AddFriendButton";
+import { DeclineFriendRequestButton } from "./components/DeclineFriendRequestButton";
+import { DeleteFriendButton } from "./components/DeleteFriendButton";
 
 interface Props {
   user: User;
 }
 
 export const FriendButtons = ({ user }: Props) => {
-  const currentUser = useAppSelector(s => s .user)
-  const friends = useAppSelector(s => s.friends);
-  const friendRequests = useAppSelector(s => s.friendRequests)
+  const currentUser = useAppSelector((s) => s.user);
+  const friends = useAppSelector((s) => s.friends);
+  const friendRequests = useAppSelector((s) => s.friendRequests);
 
   if (!user || !currentUser || user._id === currentUser._id) return <></>;
 
@@ -22,7 +22,7 @@ export const FriendButtons = ({ user }: Props) => {
       (f.friendOne === user._id && f.friendTwo === currentUser._id) ||
       (f.friendOne === currentUser._id && f.friendTwo === user._id)
   );
-  
+
   if (friend) {
     return <DeleteFriendButton friend={friend} />;
   }

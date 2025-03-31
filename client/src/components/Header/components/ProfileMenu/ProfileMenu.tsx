@@ -17,7 +17,7 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
   const user = useAppSelector((s) => s.user);
   const friendRequests = useAppSelector((s) => s.friendRequests);
   const notifications = friendRequests.filter(
-    (fr) => fr.to === user?._id
+    (fr) => fr.to === user?._id && !fr.declined
   ).length;
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
