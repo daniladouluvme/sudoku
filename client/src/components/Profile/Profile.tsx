@@ -8,15 +8,16 @@ import { Loading } from "@components/shared";
 import { useAppSelector } from "@hooks/state";
 import { FriendRequestList } from "./components/FriendRequestList";
 import { FriendList } from "./components/FriendList/FriendList";
+import { useProfileFriendRequests } from "./hooks/use-profile-friend-requests";
+import { useProfileFriends } from "./hooks/use-profile-friends";
 
 export const Profile = () => {
-  const { userService, friendService } = useService();
+  const { userService } = useService();
   const { userId } = useParams();
   const currentUser = useAppSelector((s) => s.user);
-  const friendRequests = useAppSelector((s) => s.friendRequests);
-  const currentUserfriends = useAppSelector((s) => s.friends);
+  const friendRequests = useProfileFriendRequests(userId);
+  const friends = useProfileFriends(userId);
   const [profile, setProfile] = useState<User>(null);
-  const [profileFriends, setProfileFriends] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,61 +26,46 @@ export const Profile = () => {
 
   const initProfileInfo = async () => {
     setLoading(true);
-
+    let user: User;
     try {
-      const user = await userService.get(userId);
+      user = await userService.get(userId);
       setProfile(user);
     } catch (error) {
       console.error(error);
       return;
     }
 
-    try {
-      const friends = await friendService.getUserFriends(userId);
-      setProfileFriends(friends);
-    } catch (error) {
-      console.error(error);
-    }
-
     setLoading(false);
   };
 
-  const formatedFriendRequests = 
-    currentUser._id === userId
-      ? [...friendRequests]
-          .filter((fr) => fr.to === currentUser._id && !fr.declined)
-          .splice(-3)
-      : [];
-
-  const friends =
-    currentUser._id === userId ? currentUserfriends : profileFriends;
+  const formatedFriendRequests = [...friendRequests]
+    .filter((fr) => fr.to === currentUser._id && !fr.declined)
+    .splice(-3);
 
   return (
     <Loading loading={loading}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Avatar
           sx={{
-            marginBottom: "1rem",
             alignSelf: "center",
             width: "10rem",
             height: "10rem",
           }}
         />
-
-        <Divider>
+        <Divider sx={{ marginTop: "1rem" }}>
           <Typography variant="h5">{profile?.login ?? "?"}</Typography>
         </Divider>
         <Box sx={{ display: "flex", columnGap: "1rem" }}>
           <FriendButtons user={profile} />
         </Box>
         {profile?._id !== currentUser._id && !!friends.length && (
-          <Divider sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }} />
+          <Divider sx={{ marginTop: "1rem", marginBottom: "1rem" }} />
         )}
         {!!formatedFriendRequests.length && (
           <FriendRequestList friendRequests={formatedFriendRequests} />
         )}
         {!!friends.length && !!formatedFriendRequests.length && (
-          <Divider sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }} />
+          <Divider sx={{ marginTop: "1rem", marginBottom: "1rem" }} />
         )}
         {!!friends.length && <FriendList friends={friends} profile={profile} />}
       </Box>
