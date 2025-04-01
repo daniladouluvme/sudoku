@@ -24,9 +24,8 @@ export const MainMenu = (props: IconButtonOwnProps) => {
         open={!!anchor}
         onClose={handleClose}
       >
-        <MenuItemLink key={1} to="users">
-          Users
-        </MenuItemLink>
+        <MenuItemLink to="users">Users</MenuItemLink>
+        <MenuItemLink to="games">Games</MenuItemLink>
       </Menu>
     </>
   );

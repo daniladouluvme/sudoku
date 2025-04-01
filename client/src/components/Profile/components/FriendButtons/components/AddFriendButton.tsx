@@ -1,7 +1,7 @@
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { FriendRequest } from "@model/friend-request.model";
 import { IconButton, IconButtonProps, Tooltip } from "@mui/material";
-import { useFriend } from "@hooks/use-friend";
+import { useFriend } from "@hooks";
 
 interface Props {
   friendRequest: FriendRequest;

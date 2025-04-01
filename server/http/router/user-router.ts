@@ -10,6 +10,7 @@ import { verifyToken } from "../../database/utils/verify-token";
 import { createCrudRouter } from "./create-crud-router";
 import { Friend } from "@dbmodel/friend.model";
 import { FriendRequest } from "@dbmodel/friend-request.model";
+import { Game } from "@dbmodel/game.model";
 
 export const userRouter = (): Router => {
   const router = createCrudRouter(User);
@@ -243,6 +244,32 @@ export const userRouter = (): Router => {
   );
 
   router.use("/friend", createCrudRouter(FriendRequest, { delete: true }));
+
+  // Games
+  router.get("/:userId/games", verifyToken, async (req, res): Promise<any> => {
+    try {
+      const { userId } = req.params;
+      const games = await Game.find({ user: userId });
+      res.send(games);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send();
+    }
+  });
+
+  router.post("/:userId/games", verifyToken, async (req, res): Promise<any> => {
+    try {
+      const { userId } = req.params;
+      const game = await Game.create({
+        user: userId,
+        date: new Date(),
+      });
+      res.send(game);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send();
+    }
+  });
 
   return router;
 };

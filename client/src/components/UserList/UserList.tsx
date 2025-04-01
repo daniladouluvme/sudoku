@@ -27,7 +27,7 @@ export const UserList = () => {
         {users.map((u) => (
           <ListItemButton
             key={u._id}
-            to={`/profile/${u._id}`}
+            to={`/users/${u._id}`}
             component={Link}
             color="inherit"
           >

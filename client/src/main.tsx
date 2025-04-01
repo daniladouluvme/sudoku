@@ -22,6 +22,8 @@ import { AuthorizedRoute } from "@components/ProtectedRoute/AuthorizedRoute.tsx"
 import { LoadingRoute } from "@components/ProtectedRoute/LoadingRoute.tsx";
 import { Main } from "@components/Main/Main.tsx";
 import { ServiceProvider } from "@providers/service.provider.tsx";
+import { GameList } from "@components/GameList/GameList.tsx";
+import { Game } from "@components/Game/Game.tsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -50,8 +52,10 @@ createRoot(document.getElementById("root")!).render(
                       />
                     </Route>
                     <Route element={<AuthorizedRoute />}>
-                      <Route path="profile/:userId" element={<Profile />} />
                       <Route path="users" element={<UserList />} />
+                      <Route path="users/:userId" element={<Profile />} />
+                      <Route path="games" element={<GameList />} />
+                      <Route path="games/:gameId" element={<Game />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>

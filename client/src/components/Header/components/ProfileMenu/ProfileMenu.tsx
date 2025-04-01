@@ -47,7 +47,7 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
       >
         {user
           ? [
-              <MenuItemLink key={1} to={`profile/${user._id}`}>
+              <MenuItemLink key={1} to={`users/${user._id}`}>
                 Profile
               </MenuItemLink>,
               <MenuItem key={2} onClick={handleLogout}>

@@ -17,7 +17,7 @@ export const UserInfo = ({ user }: Props) => (
     }}
     component={Link}
     color="inherit"
-    to={`/profile/${user?._id}`}
+    to={`/users/${user?._id}`}
   >
     <Avatar />
     <Typography variant="inherit">{user?.login}</Typography>

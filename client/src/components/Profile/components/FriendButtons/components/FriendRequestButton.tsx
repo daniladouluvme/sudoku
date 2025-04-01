@@ -1,7 +1,7 @@
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { User } from "@model/user.model";
 import { IconButton, Tooltip } from "@mui/material";
-import { useFriend } from "@hooks/use-friend";
+import { useFriend } from "@hooks";
 
 interface Props {
   user: User;

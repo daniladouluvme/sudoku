@@ -1,4 +1,4 @@
-import { useAppSelector } from "@hooks/state";
+import { useAppSelector } from "@hooks";
 import { User } from "@model/user.model";
 import { CancelFriendRequestButton } from "./components/CancelFriendRequestButton";
 import { FriendRequestButton } from "./components/FriendRequestButton";

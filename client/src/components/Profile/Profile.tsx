@@ -3,13 +3,11 @@ import { Box, Typography, Divider, Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { FriendButtons } from "./components/FriendButtons";
-import { useService } from "@hooks/use-service";
 import { Loading } from "@components/shared";
-import { useAppSelector } from "@hooks/state";
 import { FriendRequestList } from "./components/FriendRequestList";
 import { FriendList } from "./components/FriendList/FriendList";
-import { useProfileFriendRequests } from "./hooks/use-profile-friend-requests";
-import { useProfileFriends } from "./hooks/use-profile-friends";
+import { useProfileFriendRequests, useProfileFriends } from "./hooks";
+import { useAppSelector, useService } from "@hooks";
 
 export const Profile = () => {
   const { userService } = useService();

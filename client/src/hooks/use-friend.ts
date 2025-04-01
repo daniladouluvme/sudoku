@@ -1,6 +1,5 @@
 import { patchBackdrop, setBackdrop } from "@state/slice/backdrop.slice";
 import { useAppDispatch } from "./state";
-import { useService } from "./use-service";
 import { User } from "@model/user.model";
 import {
   addFriendRequest,
@@ -14,6 +13,7 @@ import {
   deleteFriend as deleteFriendAction,
 } from "@state/slice/friend.slice";
 import { Friend } from "@model/friend.modle";
+import { useService } from "./use-service";
 
 export const useFriend = () => {
   const { friendRequestService, friendService } = useService();
