@@ -2,9 +2,11 @@ import DehazeIcon from "@mui/icons-material/Dehaze";
 import { IconButton, IconButtonOwnProps, Menu } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { MenuItemLink } from "../MenuItemLink";
+import { useAppSelector } from "@hooks";
 
 export const MainMenu = (props: IconButtonOwnProps) => {
   const [anchor, setAnchor] = useState<HTMLElement>(null);
+  const user = useAppSelector((s) => s.user);
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setAnchor(e.currentTarget);
@@ -12,7 +14,7 @@ export const MainMenu = (props: IconButtonOwnProps) => {
 
   const handleClose = () => setAnchor(null);
 
-  return (
+  return user ? (
     <>
       <IconButton {...props} size="medium" onClick={handleClick}>
         <DehazeIcon />
@@ -28,5 +30,9 @@ export const MainMenu = (props: IconButtonOwnProps) => {
         <MenuItemLink to="games">Games</MenuItemLink>
       </Menu>
     </>
+  ) : (
+    <IconButton size="medium" sx={{ visibility: "hidden" }}>
+      <DehazeIcon />
+    </IconButton>
   );
 };

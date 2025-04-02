@@ -19,22 +19,15 @@ export const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    initProfileInfo();
-  }, [userId]);
-
-  const initProfileInfo = async () => {
     setLoading(true);
-    let user: User;
-    try {
-      user = await userService.get(userId);
-      setProfile(user);
-    } catch (error) {
-      console.error(error);
-      return;
-    }
-
-    setLoading(false);
-  };
+    userService
+      .get(userId)
+      .then((user) => {
+        setProfile(user);
+        setLoading(false);
+      })
+      .catch(console.error);
+  }, [userId]);
 
   const formatedFriendRequests = [...friendRequests]
     .filter((fr) => fr.to === currentUser._id && !fr.declined)

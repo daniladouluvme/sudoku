@@ -11,6 +11,7 @@ import { createCrudRouter } from "./create-crud-router";
 import { Friend } from "@dbmodel/friend.model";
 import { FriendRequest } from "@dbmodel/friend-request.model";
 import { Game } from "@dbmodel/game.model";
+import { SudokuGenerator } from "../../utils/sudoku";
 
 export const userRouter = (): Router => {
   const router = createCrudRouter(User);
@@ -260,9 +261,15 @@ export const userRouter = (): Router => {
   router.post("/:userId/games", verifyToken, async (req, res): Promise<any> => {
     try {
       const { userId } = req.params;
+      const { solvedSudoku, notSolvedSudoku } = new SudokuGenerator(
+        40
+      ).getSudoku();
       const game = await Game.create({
         user: userId,
         date: new Date(),
+        solvedSudoku,
+        notSolvedSudoku,
+        solved: false,
       });
       res.send(game);
     } catch (error) {

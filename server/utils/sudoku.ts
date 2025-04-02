@@ -2,7 +2,7 @@ export class SudokuGenerator {
   private solved: number[] = new Array(81).fill(0);
   private notSolved: number[] = [];
 
-  constructor(public difficulty: number) {
+  constructor(difficulty: number) {
     this.fillGrid();
     this.removeNumbers(difficulty);
   }
@@ -101,10 +101,10 @@ export class SudokuGenerator {
     return true;
   }
 
-  public getSudoku(): { solved: number[]; notSolved: number[] } {
+  public getSudoku() {
     return {
-      solved: [...this.solved],
-      notSolved: [...this.notSolved],
+      solvedSudoku: [...this.solved],
+      notSolvedSudoku: [...this.notSolved],
     };
   }
 }
