@@ -5,6 +5,7 @@ const gameSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "user" },
   solvedSudoku: { type: [Number] },
   notSolvedSudoku: { type: [Number] },
+  initialSudoku: { type: [Number] },
   solved: Boolean,
 });
 

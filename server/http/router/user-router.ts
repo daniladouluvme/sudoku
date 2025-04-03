@@ -269,6 +269,7 @@ export const userRouter = (): Router => {
         date: new Date(),
         solvedSudoku,
         notSolvedSudoku,
+        initialSudoku: notSolvedSudoku,
         solved: false,
       });
       res.send(game);
