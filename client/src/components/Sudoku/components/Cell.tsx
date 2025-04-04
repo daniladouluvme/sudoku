@@ -15,9 +15,7 @@ export const Cell = ({
   selected,
   selectCell,
 }: Props) => {
-  const handleClick = () => {
-    selectCell();
-  };
+  const handleClick = () => selectCell();
 
   return (
     <Box
