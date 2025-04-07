@@ -27,7 +27,7 @@ export const Game = () => {
   const setValue = useCallback(
     (index: number, value: number) => {
       const newNotSolved = [...game.notSolvedSudoku];
-      newNotSolved[index] = value;
+      newNotSolved[index] = value === newNotSolved[index] ? 0 : value;
       const newGame = cloneDeep(game);
       setGame({ ...newGame, notSolvedSudoku: newNotSolved });
     },

@@ -5,6 +5,7 @@ interface Props {
   disabled?: boolean;
   highlighted?: boolean;
   selected?: boolean;
+  wrong?: boolean;
   selectCell: () => void;
 }
 
@@ -13,6 +14,7 @@ export const Cell = ({
   disabled,
   highlighted,
   selected,
+  wrong,
   selectCell,
 }: Props) => {
   const handleClick = () => selectCell();
@@ -23,7 +25,7 @@ export const Cell = ({
       sx={{
         backgroundColor: selected ? "#555" : highlighted ? "#333" : "#222",
         display: "flex",
-        color: disabled ? "#999" : "inherit",
+        color: wrong ? "#ff0000" : disabled ? "#999" : "inherit",
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",

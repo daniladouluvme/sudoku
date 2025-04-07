@@ -2,6 +2,7 @@ import { Game } from "@model/game.model";
 import { Cell } from "./components";
 import { Box, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { Grid } from "./components/Grid";
 
 interface Props {
   game: Game;
@@ -10,8 +11,8 @@ interface Props {
 
 export const Sudoku = ({ game, setValue }: Props) => {
   const parentRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [cellSize, setCellSize] = useState<string>("0px");
+  const [fontSize, setFontSize] = useState<string>("1rem");
   const [selectedCell, setSelectedCell] = useState<number>();
   const selectedCellRef = useRef(null);
   const setValueRef = useRef(null);
@@ -24,22 +25,40 @@ export const Sudoku = ({ game, setValue }: Props) => {
     setValueRef.current = setValue;
   }, [setValue]);
 
+  const handleSetValue = (value: number) => {
+    if (
+      typeof selectedCellRef.current === "number" &&
+      !game.initialSudoku[selectedCellRef.current]
+    ) {
+      setValueRef.current(selectedCellRef.current, value);
+    }
+  };
+
   useEffect(() => {
     const keyEventListener = (event: KeyboardEvent) => {
       if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event.key)) {
-        if (
-          typeof selectedCellRef.current === "number" &&
-          !game.initialSudoku[selectedCellRef.current]
-        ) {
-          setValueRef.current(selectedCellRef.current, parseInt(event.key));
-        }
+        handleSetValue(parseInt(event.key));
       }
     };
 
     const parentResizeObserver = new ResizeObserver((entries) => {
       const parent = entries[0];
-      setWidth(parent.contentRect.width);
-      setHeight(parent.contentRect.height);
+      const width = parent.contentRect.width;
+      const height = parent.contentRect.height;
+
+      setCellSize(
+        width / 9 < height / 10
+          ? `calc((${width}px - 8 * 0.25rem) / 9)`
+          : `calc((${height}px - 9 * 0.25rem) / 10)`
+      );
+
+      const s = width < height ? width : height;
+      let fontSize = "1rem";
+      if (s < 500) fontSize = "1rem";
+      else if (s < 750) fontSize = "1.5rem";
+      else fontSize = "2rem";
+
+      setFontSize(fontSize);
     });
 
     if (parentRef.current) {
@@ -48,32 +67,13 @@ export const Sudoku = ({ game, setValue }: Props) => {
     }
 
     return () => {
+      window.removeEventListener("keyup", keyEventListener);
       if (parentRef.current) {
         parentResizeObserver.unobserve(parentRef.current);
         parentResizeObserver.disconnect();
-        window.removeEventListener("keyup", keyEventListener);
       }
     };
   }, []);
-
-  const gridTemplate = () => {
-    const cellSize =
-      width / 9 < height / 10
-        ? `calc((${width}px - 8 * 0.25rem) / 9)`
-        : `calc((${height}px - 9 * 0.25rem) / 10)`;
-    return {
-      gridTemplateColumns: `repeat(9, ${cellSize})`,
-      gridTemplateRows: `repeat(10, ${cellSize})`,
-    };
-  };
-
-  const fontSize = () => {
-    const s = width < height ? width : height;
-
-    if (s < 500) return "1rem";
-    else if (s < 750) return "1.5rem";
-    else return "2rem";
-  };
 
   return (
     <Box
@@ -89,12 +89,15 @@ export const Sudoku = ({ game, setValue }: Props) => {
     >
       <Box
         sx={{
-          ...gridTemplate(),
-          fontSize: fontSize(),
+          position: "relative",
+          fontSize,
           display: "grid",
+          gridTemplateColumns: `repeat(9, ${cellSize})`,
+          gridTemplateRows: `repeat(10, ${cellSize})`,
           gap: "0.25rem",
         }}
       >
+        <Grid cellSize={cellSize} />
         {game?.notSolvedSudoku.map((c, i) => (
           <Cell
             key={i}
@@ -103,6 +106,10 @@ export const Sudoku = ({ game, setValue }: Props) => {
             highlighted={
               game?.notSolvedSudoku[i] > 0 &&
               game?.notSolvedSudoku[i] === game?.notSolvedSudoku[selectedCell]
+            }
+            wrong={
+              typeof game?.notSolvedSudoku[i] === "number" &&
+              game?.notSolvedSudoku[i] !== game?.solvedSudoku[i]
             }
             value={c}
             selectCell={() => setSelectedCell(i)}
@@ -115,8 +122,9 @@ export const Sudoku = ({ game, setValue }: Props) => {
                 height: "100%",
                 width: "100%",
                 minWidth: "100%",
-                fontSize: fontSize(),
+                fontSize,
               }}
+              onClick={() => handleSetValue(n)}
             >
               {n}
             </Button>
