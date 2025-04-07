@@ -4,6 +4,7 @@ import { connectDatabase } from "./database/connect-database";
 import { createWebSocket } from "./socket/create-websocket";
 import { handleWebSocket } from "./socket/handle-websocket";
 import { handleServer } from "./http/handle-server";
+import http from 'http';
 
 const SERVER_PORT = config.server.port;
 
@@ -11,11 +12,12 @@ const SERVER_PORT = config.server.port;
 connectDatabase();
 
 // Configuring the http server
-const server = createServer();
+const expressApp = createServer();
+const server = http.createServer(expressApp);
 server.listen(SERVER_PORT, () => {
   console.log(`Server running on port ${SERVER_PORT}`);
 });
-handleServer(server);
+handleServer(expressApp);
 
 // Configuring the WebSocket
 const socket = createWebSocket(server);

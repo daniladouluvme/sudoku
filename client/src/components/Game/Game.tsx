@@ -3,8 +3,9 @@ import { Sudoku } from "@components/Sudoku/Sudoku";
 import { useService } from "@hooks";
 import { Game as IGame } from "@model/game.model";
 import { Box, Divider, Typography } from "@mui/material";
+import { isGameMove } from "@utils/game-move";
 import { cloneDeep } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 export const Game = () => {
@@ -12,6 +13,27 @@ export const Game = () => {
   const { gameService } = useService();
   const [game, setGame] = useState<IGame>();
   const [loading, setLoading] = useState(true);
+  const socketRef = useRef<WebSocket>(null);
+  const setValueRef = useRef(null);
+
+  useEffect(() => {
+    socketRef.current = new WebSocket("ws://localhost:9999");
+
+    socketRef.current.onmessage = (message) => {
+      try {
+        const data = JSON.parse(message.data);
+        if (isGameMove(data)) {
+          setValueRef.current(data.data.index, data.data.value);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    return () => {
+      socketRef.current?.close();
+    };
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -24,15 +46,35 @@ export const Game = () => {
       .catch(console.error);
   }, [gameId]);
 
-  const setValue = useCallback(
-    (index: number, value: number) => {
+  const setValueCallback = useCallback(
+    (index: number, value: number): number => {
       const newNotSolved = [...game.notSolvedSudoku];
-      newNotSolved[index] = value === newNotSolved[index] ? 0 : value;
+      const newValue = value === newNotSolved[index] ? 0 : value;
+      newNotSolved[index] = newValue;
       const newGame = cloneDeep(game);
       setGame({ ...newGame, notSolvedSudoku: newNotSolved });
+      return newValue;
     },
     [game]
   );
+
+  useEffect(() => {
+    setValueRef.current = setValueCallback;
+  }, [setValueCallback]);
+
+  const handleSetValue = (index: number, value: number) => {
+    const newValue = setValueCallback(index, value);
+    socketRef.current.send(
+      JSON.stringify({
+        type: "GAME_MOVE",
+        data: {
+          gameId,
+          index,
+          value: newValue,
+        },
+      })
+    );
+  };
 
   return (
     <Loading loading={loading}>
@@ -42,7 +84,7 @@ export const Game = () => {
         </Typography>
         <Divider sx={{ marginTop: "1rem", marginBottom: "1rem" }} />
         <Box sx={{ flexGrow: "1", overflow: "hidden" }}>
-          <Sudoku game={game} setValue={setValue} />
+          <Sudoku game={game} setValue={handleSetValue} />
         </Box>
       </Box>
     </Loading>
