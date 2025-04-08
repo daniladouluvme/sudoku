@@ -1,5 +1,4 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
-import { useAppSelector } from "@hooks";
 import { useService } from "@hooks/use-service";
 import { Game } from "@model/game.model";
 import {
@@ -15,15 +14,17 @@ import { Loading } from "@components/shared";
 
 export const GameList = () => {
   const { gameService } = useService();
-  const user = useAppSelector((s) => s.user);
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    gameService.getUserGames(user._id).then(games => {
-      setGames(games);
-      setLoading(false);
-    }).catch(console.error);
+    gameService
+      .getUserGames()
+      .then((games) => {
+        setGames(games);
+        setLoading(false);
+      })
+      .catch(console.error);
   }, []);
 
   return (

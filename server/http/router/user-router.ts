@@ -2,16 +2,16 @@ import config from "@config";
 import { Router } from "express";
 import { User } from "@dbmodel/user.model";
 import { compareSync, hashSync } from "bcryptjs";
-import { sign, decode } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import { createTransport } from "nodemailer";
 import { Verification } from "@dbmodel/verification.model";
 import { generateVerificationCode } from "../../database/utils/generate-verification-code";
 import { verifyToken } from "../../database/utils/verify-token";
 import { createCrudRouter } from "./create-crud-router";
-import { Friend } from "@dbmodel/friend.model";
-import { FriendRequest } from "@dbmodel/friend-request.model";
-import { Game } from "@dbmodel/game.model";
-import { SudokuGenerator } from "../../utils/sudoku";
+import { getUserId } from "../utils/get-user-id";
+import { friendRequestRouter } from "./friend-request-router";
+import { friendRouter } from "./friend-router";
+import { gameRouter } from "./game.router";
 
 export const userRouter = (): Router => {
   const router = createCrudRouter(User);
@@ -144,140 +144,20 @@ export const userRouter = (): Router => {
   });
 
   router.post("/verify", verifyToken, async (req, res): Promise<any> => {
-    const token: string = req.cookies.token;
-    const payload = decode(token, { json: true });
-    const userId = payload?.userId;
+    const userId = getUserId(req);
     if (!userId) return res.status(401).send();
     const user = await User.findById(userId);
     res.send(user);
   });
 
   // Friend requests
-  router.get(
-    "/:userId/friendRequests",
-    verifyToken,
-    async (req, res): Promise<any> => {
-      try {
-        const { userId } = req.params;
-        const friendRequests = await FriendRequest.find({
-          $or: [{ from: userId }, { to: userId }],
-        });
-        res.send(friendRequests);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send();
-      }
-    }
-  );
-
-  router.post(
-    "/:fromId/friendRequests/:toId",
-    verifyToken,
-    async (req, res): Promise<any> => {
-      try {
-        const { fromId, toId } = req.params;
-        const friendRequest = await FriendRequest.findOne({
-          $or: [
-            { from: fromId, to: toId },
-            { from: toId, to: fromId },
-          ],
-        });
-        if (friendRequest) return res.status(409).send(friendRequest);
-        const result = await FriendRequest.create({
-          from: fromId,
-          to: toId,
-          declined: false,
-        });
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send();
-      }
-    }
-  );
-
-  router.use(
-    "/friendRequests",
-    createCrudRouter(FriendRequest, { patch: true, delete: true })
-  );
+  router.use("/friendRequests", friendRequestRouter());
 
   // Friends
-  router.get(
-    "/:userId/friends",
-    verifyToken,
-    async (req, res): Promise<any> => {
-      try {
-        const { userId } = req.params;
-        const friends = await Friend.find({
-          $or: [{ friendOne: userId }, { friendTwo: userId }],
-        });
-        res.send(friends);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send();
-      }
-    }
-  );
-
-  router.post(
-    "/:friendOneId/friends/:friendTwoId",
-    verifyToken,
-    async (req, res): Promise<any> => {
-      try {
-        const { friendOneId, friendTwoId } = req.params;
-        const friendRequest = await Friend.findOne({
-          $or: [
-            { friendOne: friendOneId, friendTwo: friendTwoId },
-            { friendOne: friendTwoId, friendTwo: friendOneId },
-          ],
-        });
-        if (friendRequest) return res.status(409).send();
-        const result = await Friend.create({
-          friendOne: friendOneId,
-          friendTwo: friendTwoId,
-        });
-        res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send();
-      }
-    }
-  );
-
-  router.use("/friend", createCrudRouter(FriendRequest, { delete: true }));
+  router.use("/friends", friendRouter());
 
   // Games
-  router.get("/:userId/games", verifyToken, async (req, res): Promise<any> => {
-    try {
-      const { userId } = req.params;
-      const games = await Game.find({ user: userId });
-      res.send(games);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send();
-    }
-  });
-
-  router.post("/:userId/games", verifyToken, async (req, res): Promise<any> => {
-    try {
-      const { userId } = req.params;
-      const { solvedSudoku, notSolvedSudoku } = new SudokuGenerator(
-        40
-      ).getSudoku();
-      const game = await Game.create({
-        user: userId,
-        date: new Date(),
-        solvedSudoku,
-        notSolvedSudoku,
-        initialSudoku: notSolvedSudoku,
-        solved: false,
-      });
-      res.send(game);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send();
-    }
-  });
+  router.use('/games', gameRouter());
 
   return router;
 };

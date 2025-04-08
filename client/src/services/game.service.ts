@@ -7,15 +7,11 @@ export class GameService extends ApiService<Game> {
     super("/api/games");
   }
 
-  public async getUserGames(userId: string): Promise<Game[]> {
-    return await axios
-      .get(`/api/users/${userId}/games`)
-      .then((res) => res.data);
+  public async getUserGames(): Promise<Game[]> {
+    return await axios.get(`/api/users/games`).then((res) => res.data);
   }
 
-  public async createGame(userId: string): Promise<Game> {
-    return await axios
-      .post(`/api/users/${userId}/games`)
-      .then((res) => res.data);
+  public async createGame(): Promise<Game> {
+    return await axios.post(`/api/users/games`).then((res) => res.data);
   }
 }
