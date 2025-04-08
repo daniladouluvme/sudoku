@@ -1,7 +1,7 @@
 import { FriendRequest } from "@dbmodel/friend-request.model";
-import { createCrudRouter } from "./create-crud-router";
-import { verifyToken } from "../../database/utils/verify-token";
-import { getUserId } from "../utils/get-user-id";
+import { createCrudRouter } from "../create-crud-router";
+import { verifyToken } from "../../../database/utils/verify-token";
+import { getUserId } from "../../utils/get-user-id";
 
 export const friendRequestRouter = () => {
   const router = createCrudRouter(FriendRequest, { patch: true, delete: true });

@@ -5,13 +5,12 @@ import { useFriend } from "@hooks";
 
 interface Props {
   user: User;
-  currentUser: User;
 }
 
-export const FriendRequestButton = ({ user, currentUser }: Props) => {
+export const FriendRequestButton = ({ user }: Props) => {
   const { friendRequest } = useFriend();
 
-  const handleClick = () => friendRequest(user, currentUser);
+  const handleClick = () => friendRequest(user);
 
   return (
     <Tooltip title="Friend request">

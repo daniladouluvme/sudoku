@@ -1,7 +1,8 @@
-import { verifyToken } from "../../database/utils/verify-token";
-import { getUserId } from "../utils/get-user-id";
-import { createCrudRouter } from "./create-crud-router";
+
 import { Friend } from "@dbmodel/friend.model";
+import { createCrudRouter } from "../create-crud-router";
+import { verifyToken } from "../../../database/utils/verify-token";
+import { getUserId } from "../../utils/get-user-id";
 
 export const friendRouter = () => {
   const router = createCrudRouter(Friend, { delete: true });

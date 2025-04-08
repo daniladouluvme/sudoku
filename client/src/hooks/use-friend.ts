@@ -19,12 +19,11 @@ export const useFriend = () => {
   const { friendRequestService, friendService } = useService();
   const dispatch = useAppDispatch();
 
-  const friendRequest = async (user: User, currentUser: User) => {
+  const friendRequest = async (user: User) => {
     dispatch(setBackdrop({ loading: true }));
 
     try {
       const friendRequest = await friendRequestService.sendFriendRequest(
-        currentUser._id,
         user._id
       );
 
@@ -40,10 +39,7 @@ export const useFriend = () => {
 
           await friendRequestService.delete(friendRequest._id);
 
-          const friend = await friendService.addFriend(
-            friendRequest.from,
-            friendRequest.to
-          );
+          const friend = await friendService.addFriend(friendRequest.from);
 
           dispatch(addFriend(friend));
         } catch (error) {
@@ -62,7 +58,7 @@ export const useFriend = () => {
   };
 
   const acceptFriendRequest = async (friendRequest: FriendRequest) => {
-    const { from, to } = friendRequest;
+    const { from } = friendRequest;
 
     dispatch(setBackdrop({ loading: true }));
 
@@ -75,7 +71,7 @@ export const useFriend = () => {
     }
 
     try {
-      const friend = await friendService.addFriend(from, to);
+      const friend = await friendService.addFriend(from);
 
       dispatch(addFriend(friend));
     } catch (error) {

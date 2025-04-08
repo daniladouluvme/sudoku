@@ -5,16 +5,16 @@ import { compareSync, hashSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { createTransport } from "nodemailer";
 import { Verification } from "@dbmodel/verification.model";
-import { generateVerificationCode } from "../../database/utils/generate-verification-code";
-import { verifyToken } from "../../database/utils/verify-token";
-import { createCrudRouter } from "./create-crud-router";
-import { getUserId } from "../utils/get-user-id";
+import { generateVerificationCode } from "../../../database/utils/generate-verification-code";
+import { verifyToken } from "../../../database/utils/verify-token";
+import { createCrudRouter } from "../create-crud-router";
+import { getUserId } from "../../utils/get-user-id";
 import { friendRequestRouter } from "./friend-request-router";
 import { friendRouter } from "./friend-router";
 import { gameRouter } from "./game.router";
 
 export const userRouter = (): Router => {
-  const router = createCrudRouter(User);
+  const router = Router();
 
   router.post("/login", async (req, res): Promise<any> => {
     const { login, password } = req.body;
@@ -157,7 +157,9 @@ export const userRouter = (): Router => {
   router.use("/friends", friendRouter());
 
   // Games
-  router.use('/games', gameRouter());
+  router.use("/games", gameRouter());
+
+  router.use("", createCrudRouter(User));
 
   return router;
 };

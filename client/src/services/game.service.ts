@@ -1,17 +1,19 @@
 import { Game } from "@model/game.model";
-import { ApiService } from "./api.service";
 import axios from "axios";
 
-export class GameService extends ApiService<Game> {
-  constructor() {
-    super("/api/games");
-  }
+export class GameService {
+  protected url = "/api/users/games";
+  constructor() {}
 
   public async getUserGames(): Promise<Game[]> {
-    return await axios.get(`/api/users/games`).then((res) => res.data);
+    return await axios.get(this.url).then((res) => res.data);
   }
 
   public async createGame(): Promise<Game> {
-    return await axios.post(`/api/users/games`).then((res) => res.data);
+    return await axios.post(this.url).then((res) => res.data);
+  }
+
+  public async getGame(id: string): Promise<Game> {
+    return await axios.get(`${this.url}/${id}`).then((res) => res.data);
   }
 }

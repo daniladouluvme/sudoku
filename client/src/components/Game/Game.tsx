@@ -38,7 +38,7 @@ export const Game = () => {
   useEffect(() => {
     setLoading(true);
     gameService
-      .get(gameId)
+      .getGame(gameId)
       .then((game) => {
         setGame(game);
         setLoading(false);

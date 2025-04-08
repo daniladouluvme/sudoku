@@ -37,7 +37,7 @@ export const FriendButtons = ({ user }: Props) => {
     !friendRequest ||
     (friendRequest?.from === user._id && friendRequest?.declined)
   ) {
-    return <FriendRequestButton currentUser={currentUser} user={user} />;
+    return <FriendRequestButton user={user} />;
   }
 
   if (friendRequest.to === user._id) {

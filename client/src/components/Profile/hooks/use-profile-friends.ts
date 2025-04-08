@@ -11,8 +11,8 @@ export const useProfileFriends = (userId: string): Friend[] => {
 
   useEffect(() => {
     setFriends([]);
-    friendService.getUserFriends(userId).then(setFriends).catch(console.error);
+    friendService.getUserFriends().then(setFriends).catch(console.error);
   }, [userId]);
-  
+
   return currentUser._id === userId ? currentUserFriends : friends;
 };
