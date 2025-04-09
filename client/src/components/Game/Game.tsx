@@ -7,16 +7,35 @@ import { isGameMove } from "@utils/game-move";
 import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import { InviteFriend } from "./components";
+import { GameRequest } from "@model/game-request.model";
 
 export const Game = () => {
   const { gameId } = useParams();
-  const { gameService } = useService();
+  const { gameService, gameRequestService } = useService();
   const [game, setGame] = useState<IGame>();
+  const [gameRequests, setGameRequests] = useState<GameRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const socketRef = useRef<WebSocket>(null);
   const setValueRef = useRef(null);
 
-  useEffect(() => {
+  const gameInit = async () => {
+    setLoading(true);
+    try {
+      const g = await gameService.getGame(gameId);
+      setGame(g);
+
+      const gr = await gameRequestService.getGameGameRequests(g._id);
+      setGameRequests(gr);
+      
+      handleSocket();
+      setLoading(false);
+    } catch (error) {
+      console.error();
+    }
+  };
+
+  const handleSocket = () => {
     socketRef.current = new WebSocket("ws://localhost:9999");
 
     socketRef.current.onmessage = (message) => {
@@ -29,21 +48,14 @@ export const Game = () => {
         console.error(error);
       }
     };
+  };
+
+  useEffect(() => {
+    gameInit();
 
     return () => {
       socketRef.current?.close();
     };
-  }, []);
-
-  useEffect(() => {
-    setLoading(true);
-    gameService
-      .getGame(gameId)
-      .then((game) => {
-        setGame(game);
-        setLoading(false);
-      })
-      .catch(console.error);
   }, [gameId]);
 
   const setValueCallback = useCallback(
@@ -79,9 +91,12 @@ export const Game = () => {
   return (
     <Loading loading={loading}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        <Typography variant="h6" sx={{ alignSelf: "center" }}>
-          {new Date(game?.date).toLocaleString()}
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography sx={{ alignSelf: "center" }}>
+            {new Date(game?.date).toLocaleString()}
+          </Typography>
+          <InviteFriend />
+        </Box>
         <Divider sx={{ marginTop: "1rem", marginBottom: "1rem" }} />
         <Box sx={{ flexGrow: "1", overflow: "hidden" }}>
           <Sudoku game={game} setValue={handleSetValue} />

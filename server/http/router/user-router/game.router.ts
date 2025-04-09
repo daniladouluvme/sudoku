@@ -34,7 +34,7 @@ export const gameRouter = () => {
 
         const game = await Game.findOne({ _id: id });
         if (!game) return res.status(404).send();
-        if (game.user !== user) return res.status(403).send();
+        if (!game.user.equals(user)) return res.status(403).send();
 
         const gameRequests = await GameRequest.find({ game: id });
         res.send(gameRequests);

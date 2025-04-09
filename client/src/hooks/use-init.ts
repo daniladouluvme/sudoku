@@ -58,7 +58,7 @@ export const useInit = () => {
   const initFriends = async () => {
     if (currentUser && currentUser._id !== prevUser?._id) {
       try {
-        const friends = await friendService.getUserFriends();
+        const friends = await friendService.getUserFriends(currentUser._id);
         dispatch(setFriends(friends));
       } catch (error) {
         console.error(error);

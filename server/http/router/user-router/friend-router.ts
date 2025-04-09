@@ -1,4 +1,3 @@
-
 import { Friend } from "@dbmodel/friend.model";
 import { createCrudRouter } from "../create-crud-router";
 import { verifyToken } from "../../../database/utils/verify-token";
@@ -6,19 +5,6 @@ import { getUserId } from "../../utils/get-user-id";
 
 export const friendRouter = () => {
   const router = createCrudRouter(Friend, { delete: true });
-
-  router.get("/", verifyToken, async (req, res): Promise<any> => {
-    try {
-      const userId = getUserId(req);
-      const friends = await Friend.find({
-        $or: [{ friendOne: userId }, { friendTwo: userId }],
-      });
-      res.send(friends);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send();
-    }
-  });
 
   router.post("/:friendTwoId", verifyToken, async (req, res): Promise<any> => {
     try {

@@ -13,6 +13,7 @@ import { friendRequestRouter } from "./friend-request-router";
 import { friendRouter } from "./friend-router";
 import { gameRouter } from "./game.router";
 import { gameRequestRouter } from "./game-request.router";
+import { Friend } from "@dbmodel/friend.model";
 
 export const userRouter = (): Router => {
   const router = Router();
@@ -156,6 +157,19 @@ export const userRouter = (): Router => {
 
   // Friends
   router.use("/friends", friendRouter());
+
+  router.get("/:id/friends", verifyToken, async (req, res): Promise<any> => {
+    try {
+      const { id } = req.params;
+      const friends = await Friend.find({
+        $or: [{ friendOne: id }, { friendTwo: id }],
+      });
+      res.send(friends);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send();
+    }
+  });
 
   // Games
   router.use("/games", gameRouter());

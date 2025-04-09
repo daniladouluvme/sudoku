@@ -8,8 +8,10 @@ export class FriendService extends ApiService<Friend> {
     super("/api/friends");
   }
 
-  public async getUserFriends(): Promise<Friend[]> {
-    return await axios.get(`/api/users/friends`).then((res) => res.data);
+  public async getUserFriends(user: User["_id"]): Promise<Friend[]> {
+    return await axios
+      .get(`/api/users/${user}/friends`)
+      .then((res) => res.data);
   }
 
   public async addFriend(friendTwoId: User["_id"]): Promise<Friend> {
