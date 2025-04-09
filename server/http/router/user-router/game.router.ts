@@ -3,17 +3,20 @@ import { createCrudRouter } from "../create-crud-router";
 import { verifyToken } from "../../../database/utils/verify-token";
 import { getUserId } from "../../utils/get-user-id";
 import { SudokuGenerator } from "../../../utils/sudoku";
+import { GameRequest } from "@dbmodel/game-request.model";
 
 export const gameRouter = () => {
   const router = createCrudRouter(Game, {
-    get: true,
     patch: true,
   });
 
   router.get("/", verifyToken, async (req, res): Promise<any> => {
     try {
-      const userId = getUserId(req);
-      const games = await Game.find({ user: userId });
+      const user = getUserId(req);
+      const gameRequests = await GameRequest.find({ user });
+      const games = await Game.find({
+        $or: [{ user }, { _id: { $in: gameRequests.map((gr) => gr.game) } }],
+      });
       res.send(games);
     } catch (error) {
       console.error(error);
@@ -23,12 +26,10 @@ export const gameRouter = () => {
 
   router.get("/:id", verifyToken, async (req, res): Promise<any> => {
     try {
-      console.log('tyt')
       const userId = getUserId(req);
       const { id } = req.params;
-      console.log(userId, id);
       const game = await Game.findById(id);
-      if (game.user !== userId) return res.status(403).send();
+      if (!game?.user.equals(userId)) return res.status(403).send();
       res.send(game);
     } catch (error) {
       console.error(error);

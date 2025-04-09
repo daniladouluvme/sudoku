@@ -12,6 +12,7 @@ import { getUserId } from "../../utils/get-user-id";
 import { friendRequestRouter } from "./friend-request-router";
 import { friendRouter } from "./friend-router";
 import { gameRouter } from "./game.router";
+import { gameRequestRouter } from "./game-request.router";
 
 export const userRouter = (): Router => {
   const router = Router();
@@ -158,6 +159,9 @@ export const userRouter = (): Router => {
 
   // Games
   router.use("/games", gameRouter());
+
+  // Game requests
+  router.use("/gameRequests", gameRequestRouter());
 
   router.use("", createCrudRouter(User));
 
