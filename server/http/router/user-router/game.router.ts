@@ -24,6 +24,27 @@ export const gameRouter = () => {
     }
   });
 
+  router.get(
+    "/:id/gameRequests",
+    verifyToken,
+    async (req, res): Promise<any> => {
+      try {
+        const user = getUserId(req);
+        const { id } = req.params;
+
+        const game = await Game.findOne({ _id: id });
+        if (!game) return res.status(404).send();
+        if (game.user !== user) return res.status(403).send();
+
+        const gameRequests = await GameRequest.find({ game: id });
+        res.send(gameRequests);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send();
+      }
+    }
+  );
+
   router.get("/:id", verifyToken, async (req, res): Promise<any> => {
     try {
       const userId = getUserId(req);
