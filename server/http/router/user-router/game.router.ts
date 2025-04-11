@@ -49,8 +49,16 @@ export const gameRouter = () => {
     try {
       const userId = getUserId(req);
       const { id } = req.params;
+
       const game = await Game.findById(id);
-      if (!game?.user.equals(userId)) return res.status(403).send();
+      if (!game) return res.status(404).send();
+      if (game?.user.equals(userId)) return res.send(game);
+
+      const gameRequests = await GameRequest.find({ game: id });
+      if (gameRequests.every((gr) => !gr.user.equals(userId))) {
+        return res.status(403).send();
+      }
+
       res.send(game);
     } catch (error) {
       console.error(error);

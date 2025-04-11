@@ -7,14 +7,12 @@ import { isGameMove } from "@utils/game-move";
 import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { InviteFriend } from "./components";
-import { GameRequest } from "@model/game-request.model";
+import { Partner } from "./components/Partner";
 
 export const Game = () => {
   const { gameId } = useParams();
-  const { gameService, gameRequestService } = useService();
+  const { gameService } = useService();
   const [game, setGame] = useState<IGame>();
-  const [gameRequests, setGameRequests] = useState<GameRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const socketRef = useRef<WebSocket>(null);
   const setValueRef = useRef(null);
@@ -25,9 +23,6 @@ export const Game = () => {
       const g = await gameService.getGame(gameId);
       setGame(g);
 
-      const gr = await gameRequestService.getGameGameRequests(g._id);
-      setGameRequests(gr);
-      
       handleSocket();
       setLoading(false);
     } catch (error) {
@@ -91,11 +86,11 @@ export const Game = () => {
   return (
     <Loading loading={loading}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center', height: '2rem' }}>
           <Typography sx={{ alignSelf: "center" }}>
             {new Date(game?.date).toLocaleString()}
           </Typography>
-          <InviteFriend />
+          <Partner game={game} />
         </Box>
         <Divider sx={{ marginTop: "1rem", marginBottom: "1rem" }} />
         <Box sx={{ flexGrow: "1", overflow: "hidden" }}>

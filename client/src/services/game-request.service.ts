@@ -4,8 +4,6 @@ import axios from "axios";
 import { GameRequest } from "@model/game-request.model";
 
 export class GameRequestService {
-  constructor() {}
-
   public async getGameGameRequests(game: Game["_id"]): Promise<GameRequest[]> {
     return await axios
       .get(`/api/users/games/${game}/gameRequests/`)
