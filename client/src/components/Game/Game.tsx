@@ -31,6 +31,7 @@ export const Game = () => {
   };
 
   const handleSocket = () => {
+    socketRef.current?.close();
     socketRef.current = new WebSocket("ws://localhost:9999");
 
     socketRef.current.onmessage = (message) => {
@@ -86,7 +87,14 @@ export const Game = () => {
   return (
     <Loading loading={loading}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center', height: '2rem' }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            height: "2rem",
+          }}
+        >
           <Typography sx={{ alignSelf: "center" }}>
             {new Date(game?.date).toLocaleString()}
           </Typography>

@@ -19,16 +19,19 @@ export const Partner = ({ game }: Props) => {
 
   useEffect(() => {
     setGameRequests([]);
-    gameRequestService
-      .getGameGameRequests(game._id)
-      .then(setGameRequests)
-      .catch(console.error);
+    if (currentUser._id === game.user) {
+      gameRequestService
+        .getGameGameRequests(game._id)
+        .then(setGameRequests)
+        .catch(console.error);
+    }
   }, []);
 
   useEffect(() => {
     setUser(null);
+
     const userId =
-      game.user === currentUser._id ? gameRequests[0]?.user : currentUser._id;
+      game.user === currentUser._id ? gameRequests[0]?.user : game.user;
     if (userId) {
       userService.get(userId).then(setUser).catch(console.error);
     }
@@ -46,7 +49,7 @@ export const Partner = ({ game }: Props) => {
 
   if (game.user !== currentUser._id && user) {
     return <Typography>{user.login}</Typography>;
-  }    
+  }
 
   return user ? (
     <CancelGameRequestButton
