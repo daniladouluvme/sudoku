@@ -5,6 +5,10 @@ export class GameService {
   protected url = "/api/users/games";
   constructor() {}
 
+  public async createUnauthorizedGame(): Promise<Game> {
+    return await axios.get("api/games/create").then((res) => res.data);
+  }
+
   public async getUserGames(): Promise<Game[]> {
     return await axios.get(this.url).then((res) => res.data);
   }

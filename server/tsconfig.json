@@ -27,7 +27,8 @@
 
     "paths": {
       "@config": ["./config/config.ts"],
-      "@dbmodel/*": ["./database/model/*"]
+      "@dbmodel/*": ["./database/model/*"],
+      "@utils/*": ["./utils/*"]
     }
   }
 }

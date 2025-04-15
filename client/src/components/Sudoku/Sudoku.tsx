@@ -16,6 +16,7 @@ export const Sudoku = ({ game, setValue }: Props) => {
   const [selectedCell, setSelectedCell] = useState<number>();
   const selectedCellRef = useRef(null);
   const setValueRef = useRef(null);
+  const handleSetValueRef = useRef(null);
 
   useEffect(() => {
     selectedCellRef.current = selectedCell;
@@ -25,19 +26,21 @@ export const Sudoku = ({ game, setValue }: Props) => {
     setValueRef.current = setValue;
   }, [setValue]);
 
-  const handleSetValue = (value: number) => {
-    if (
-      typeof selectedCellRef.current === "number" &&
-      !game.initialSudoku[selectedCellRef.current]
-    ) {
-      setValueRef.current(selectedCellRef.current, value);
-    }
-  };
+  useEffect(() => {
+    handleSetValueRef.current = (value: number) => {
+      if (
+        typeof selectedCellRef.current === "number" &&
+        !game.initialSudoku[selectedCellRef.current]
+      ) {
+        setValueRef.current(selectedCellRef.current, value);
+      }
+    };
+  }, [game]);
 
   useEffect(() => {
     const keyEventListener = (event: KeyboardEvent) => {
       if (["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event.key)) {
-        handleSetValue(parseInt(event.key));
+        handleSetValueRef.current(parseInt(event.key));
       }
     };
 
@@ -124,7 +127,7 @@ export const Sudoku = ({ game, setValue }: Props) => {
                 minWidth: "100%",
                 fontSize,
               }}
-              onClick={() => handleSetValue(n)}
+              onClick={() => handleSetValueRef.current(n)}
             >
               {n}
             </Button>
