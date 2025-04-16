@@ -4,6 +4,7 @@ import { FriendRequestService } from "@service/friend-request.service";
 import { FriendService } from "@service/friend.service";
 import { GameRequestService } from "@service/game-request.service";
 import { GameService } from "@service/game.service";
+import { SocketService } from "@service/socket.service";
 import { UserService } from "@service/user.serivce";
 import { ReactNode } from "react";
 
@@ -16,6 +17,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => (
       friendRequestService: new FriendRequestService(),
       gameService: new GameService(),
       gameRequestService: new GameRequestService(),
+      socketService: new SocketService(),
     }}
   >
     {children}

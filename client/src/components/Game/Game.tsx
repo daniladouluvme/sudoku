@@ -11,10 +11,9 @@ import { Partner } from "./components/Partner";
 
 export const Game = () => {
   const { gameId } = useParams();
-  const { gameService } = useService();
+  const { gameService, socketService } = useService();
   const [game, setGame] = useState<IGame>();
   const [loading, setLoading] = useState(true);
-  const socketRef = useRef<WebSocket>(null);
   const setValueRef = useRef(null);
 
   const gameInit = async () => {
@@ -22,35 +21,29 @@ export const Game = () => {
     try {
       const g = await gameService.getGame(gameId);
       setGame(g);
-
-      handleSocket();
       setLoading(false);
     } catch (error) {
       console.error();
     }
   };
 
-  const handleSocket = () => {
-    socketRef.current?.close();
-    socketRef.current = new WebSocket("ws://localhost:9999");
-
-    socketRef.current.onmessage = (message) => {
-      try {
-        const data = JSON.parse(message.data);
-        if (isGameMove(data)) {
-          setValueRef.current(data.data.index, data.data.value);
-        }
-      } catch (error) {
-        console.error(error);
+  const handleSocketMessage = useCallback((message: MessageEvent<any>) => {
+    try {
+      const data = JSON.parse(message.data);
+      if (isGameMove(data)) {
+        setValueRef.current(data.data.index, data.data.value);
       }
-    };
-  };
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   useEffect(() => {
     gameInit();
+    socketService.addHandler(handleSocketMessage);
 
     return () => {
-      socketRef.current?.close();
+      socketService.removeHandler(handleSocketMessage);
     };
   }, [gameId]);
 
@@ -72,7 +65,7 @@ export const Game = () => {
 
   const handleSetValue = (index: number, value: number) => {
     const newValue = setValueCallback(index, value);
-    socketRef.current.send(
+    socketService.send(
       JSON.stringify({
         type: "GAME_MOVE",
         data: {

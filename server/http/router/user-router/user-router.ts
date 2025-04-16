@@ -8,7 +8,7 @@ import { Verification } from "@dbmodel/verification.model";
 import { generateVerificationCode } from "../../../database/utils/generate-verification-code";
 import { verifyToken } from "../../../database/utils/verify-token";
 import { createCrudRouter } from "../create-crud-router";
-import { getUserId } from "../../utils/get-user-id";
+import { getUserId } from "../../../utils/get-user-id";
 import { friendRequestRouter } from "./friend-request-router";
 import { friendRouter } from "./friend-router";
 import { gameRouter } from "./game.router";
@@ -146,7 +146,7 @@ export const userRouter = (): Router => {
   });
 
   router.post("/verify", verifyToken, async (req, res): Promise<any> => {
-    const userId = getUserId(req);
+    const userId = getUserId(req.cookies);
     if (!userId) return res.status(401).send();
     const user = await User.findById(userId);
     res.send(user);

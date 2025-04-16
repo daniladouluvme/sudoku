@@ -1,7 +1,7 @@
 import { Game } from "@dbmodel/game.model";
 import { createCrudRouter } from "../create-crud-router";
 import { verifyToken } from "../../../database/utils/verify-token";
-import { getUserId } from "../../utils/get-user-id";
+import { getUserId } from "../../../utils/get-user-id";
 import { SudokuGenerator } from "../../../utils/sudoku";
 import { GameRequest } from "@dbmodel/game-request.model";
 
@@ -12,7 +12,7 @@ export const gameRouter = () => {
 
   router.get("/", verifyToken, async (req, res): Promise<any> => {
     try {
-      const user = getUserId(req);
+      const user = getUserId(req.cookies);
       const gameRequests = await GameRequest.find({ user });
       const games = await Game.find({
         $or: [{ user }, { _id: { $in: gameRequests.map((gr) => gr.game) } }],
@@ -29,7 +29,7 @@ export const gameRouter = () => {
     verifyToken,
     async (req, res): Promise<any> => {
       try {
-        const user = getUserId(req);
+        const user = getUserId(req.cookies);
         const { id } = req.params;
 
         const game = await Game.findOne({ _id: id });
@@ -47,7 +47,7 @@ export const gameRouter = () => {
 
   router.get("/:id", verifyToken, async (req, res): Promise<any> => {
     try {
-      const userId = getUserId(req);
+      const userId = getUserId(req.cookies);
       const { id } = req.params;
 
       const game = await Game.findById(id);
@@ -72,7 +72,7 @@ export const gameRouter = () => {
         40
       ).getSudoku();
       const game = await Game.create({
-        user: getUserId(req),
+        user: getUserId(req.cookies),
         date: new Date(),
         solvedSudoku,
         notSolvedSudoku,

@@ -1,6 +1,6 @@
 import { setUser } from "@state/slice/user.slice";
 import { useAppDispatch, useAppSelector } from "./state";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setLoading } from "@state/slice/loading.slice";
 import { setFriendRequests } from "@state/slice/friend-request.slice";
 import { setFriends } from "@state/slice/friend.slice";
@@ -8,16 +8,25 @@ import { useService } from "./use-service";
 import { usePrevious } from "./use-previous";
 
 export const useInit = () => {
-  const { authorizationService, friendRequestService, friendService } =
-    useService();
+  const {
+    authorizationService,
+    friendRequestService,
+    friendService,
+    socketService,
+  } = useService();
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((s) => s.user);
   const prevUser = usePrevious(currentUser);
+  const socketRef = useRef<WebSocket>(null);
 
   const [isVerificationEnded, setIsVerificationEnded] = useState(false);
 
   useEffect(() => {
     initUser();
+
+    return () => {
+      socketRef.current?.close();
+    };
   }, []);
 
   useEffect(() => {
@@ -27,6 +36,7 @@ export const useInit = () => {
   const initData = async () => {
     await initFriendRequests();
     await initFriends();
+    initSocket();
     dispatch(setLoading(false));
   };
 
@@ -39,6 +49,17 @@ export const useInit = () => {
       dispatch(setLoading(false));
     }
     setIsVerificationEnded(true);
+  };
+
+  const initSocket = async () => {
+    if (currentUser && currentUser._id !== prevUser?._id) {
+      socketRef.current?.close();
+      socketRef.current = new WebSocket("ws://localhost:9999/ws");
+      socketRef.current.onmessage = socketService.hanleMessage.bind(socketService);
+      socketService.send = socketRef.current.send.bind(socketRef.current);
+    } else {
+      socketRef.current?.close();
+    }
   };
 
   const initFriendRequests = async () => {
