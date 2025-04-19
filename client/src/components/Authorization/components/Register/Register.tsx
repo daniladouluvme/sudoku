@@ -32,7 +32,7 @@ export const Register = () => {
         password: data.password,
       })
       .then((user) => {
-        navigate(`verification/${user._id}`);
+        navigate(`/verification/${user._id}`);
         dispatch(clearBackdrop());
       })
       .catch((error: AxiosError<{ login?: boolean; email?: boolean }>) => {

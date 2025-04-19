@@ -63,7 +63,7 @@ export const useFriend = () => {
     dispatch(setBackdrop({ loading: true }));
 
     try {
-      await friendRequestService.delete(friendRequest._id);
+      await friendRequestService.deleteFriendRequest(friendRequest._id);
 
       dispatch(deleteFriendRequest(friendRequest._id));
     } catch (error) {
@@ -93,9 +93,10 @@ export const useFriend = () => {
     dispatch(setBackdrop({ loading: true }));
     const id = friendRequest._id;
     try {
-      const declinedFriendRequest = await friendRequestService.patch(id, {
-        declined: true,
-      });
+      const declinedFriendRequest =
+        await friendRequestService.declineFriendRequest(id, {
+          declined: true,
+        });
       dispatch(updateFriendRequest(declinedFriendRequest));
     } catch (error) {
       console.error(error);
@@ -113,7 +114,7 @@ export const useFriend = () => {
     dispatch(setBackdrop({ loading: true }));
     const id = friendRequest._id;
     try {
-      await friendRequestService.delete(id);
+      await friendRequestService.deleteFriendRequest(id);
       dispatch(deleteFriendRequest(id));
     } catch (error) {
       console.error(error);
@@ -133,7 +134,7 @@ export const useFriend = () => {
     const id = friend._id;
 
     try {
-      await friendService.delete(id);
+      await friendService.deleteFriend(id);
 
       dispatch(deleteFriendAction(id));
     } catch (error) {

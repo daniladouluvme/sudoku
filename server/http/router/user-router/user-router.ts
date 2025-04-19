@@ -28,7 +28,7 @@ export const userRouter = (): Router => {
     }
 
     if (!user.emailVerified) {
-      return res.status(201).send(user);
+      return res.status(403).send({ emailNotVerified: true });
     }
 
     const token = sign(

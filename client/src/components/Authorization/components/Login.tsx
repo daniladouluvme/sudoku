@@ -32,15 +32,24 @@ export const Login = () => {
         dispatch(setUser(user));
         dispatch(clearBackdrop());
       })
-      .catch((error: AxiosError<{ notFound?: boolean }>) => {
-        console.error(error);
-        let errorMessage = "An unknown error occurred during authorization";
-        if (error.status === 404) {
-          const { notFound } = error.response.data ?? {};
-          if (notFound) errorMessage = "The user was not found";
+      .catch(
+        (
+          error: AxiosError<{ notFound?: boolean; emailNotVerified?: boolean }>
+        ) => {
+          console.error(error);
+          let errorMessage = "An unknown error occurred during authorization";
+          if (error.status === 404) {
+            const { notFound } = error.response.data ?? {};
+            if (notFound) errorMessage = "The user was not found";
+          }
+
+          if (error.status === 403) {
+            const { emailNotVerified } = error.response.data ?? {};
+            if (emailNotVerified) errorMessage = "The user's email has not been verified";
+          }
+          dispatch(setBackdrop({ error: errorMessage }));
         }
-        dispatch(setBackdrop({ error: errorMessage }));
-      });
+      );
   };
 
   return (

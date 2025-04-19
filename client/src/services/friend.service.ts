@@ -19,4 +19,10 @@ export class FriendService extends ApiService<Friend> {
       .post(`/api/users/friends/${friendTwoId}`)
       .then((res) => res.data);
   }
+
+  public async deleteFriend(id: Friend["_id"]): Promise<Friend> {
+    return await axios
+      .delete(`/api/users/friends/${id}`)
+      .then((res) => res.data);
+  }
 }
