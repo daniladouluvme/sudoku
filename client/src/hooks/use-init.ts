@@ -31,7 +31,7 @@ export const useInit = () => {
 
   useEffect(() => {
     isVerificationEnded && initData();
-  }, [currentUser]);
+  }, [currentUser, isVerificationEnded]);
 
   const initData = async () => {
     await initFriendRequests();
@@ -54,7 +54,9 @@ export const useInit = () => {
     return new Promise((res, rej) => {
       if (currentUser && currentUser._id !== prevUser?._id) {
         socketRef.current?.close();
-        socketRef.current = new WebSocket("ws://localhost:9999/ws");
+        socketRef.current = new WebSocket(
+          `ws://${window.location.hostname}:9999/ws`
+        );
         socketRef.current.onmessage =
           socketService.hanleMessage.bind(socketService);
         socketService.send = socketRef.current.send.bind(socketRef.current);
