@@ -36,7 +36,7 @@ export const useInit = () => {
   const initData = async () => {
     await initFriendRequests();
     await initFriends();
-    initSocket();
+    await initSocket();
     dispatch(setLoading(false));
   };
 
@@ -46,20 +46,27 @@ export const useInit = () => {
       dispatch(setUser(user));
     } catch (error) {
       console.error(error);
-      dispatch(setLoading(false));
     }
     setIsVerificationEnded(true);
   };
 
   const initSocket = async () => {
-    if (currentUser && currentUser._id !== prevUser?._id) {
-      socketRef.current?.close();
-      socketRef.current = new WebSocket("ws://localhost:9999/ws");
-      socketRef.current.onmessage = socketService.hanleMessage.bind(socketService);
-      socketService.send = socketRef.current.send.bind(socketRef.current);
-    } else {
-      socketRef.current?.close();
-    }
+    return new Promise((res, rej) => {
+      if (currentUser && currentUser._id !== prevUser?._id) {
+        socketRef.current?.close();
+        socketRef.current = new WebSocket("ws://localhost:9999/ws");
+        socketRef.current.onmessage =
+          socketService.hanleMessage.bind(socketService);
+        socketService.send = socketRef.current.send.bind(socketRef.current);
+        socketRef.current.onopen = res;
+        socketRef.current.onerror = rej;
+      }
+
+      if (!currentUser) {
+        socketRef.current?.close();
+        res(null);
+      }
+    });
   };
 
   const initFriendRequests = async () => {

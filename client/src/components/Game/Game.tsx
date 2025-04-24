@@ -1,6 +1,6 @@
 import { Loading } from "@components/shared";
 import { Sudoku } from "@components/Sudoku/Sudoku";
-import { useService } from "@hooks";
+import { useAppSelector, useService } from "@hooks";
 import { Game as IGame } from "@model/game.model";
 import { Box, Divider, Typography } from "@mui/material";
 import { isGameMove } from "@utils/game-move";
@@ -12,6 +12,7 @@ import { Partner } from "./components/Partner";
 export const Game = () => {
   const { gameId } = useParams();
   const { gameService, socketService } = useService();
+  const user = useAppSelector((s) => s.user);
   const [game, setGame] = useState<IGame>();
   const [loading, setLoading] = useState(true);
   const setValueRef = useRef(null);
@@ -41,9 +42,27 @@ export const Game = () => {
   useEffect(() => {
     gameInit();
     socketService.addHandler(handleSocketMessage);
+    socketService.send(
+      JSON.stringify({
+        type: "GAME_ENTER",
+        data: {
+          gameId,
+          userId: user._id,
+        },
+      })
+    );
 
     return () => {
       socketService.removeHandler(handleSocketMessage);
+      socketService.send(
+        JSON.stringify({
+          type: "GAME_OUT",
+          data: {
+            gameId,
+            userId: user._id,
+          },
+        })
+      );
     };
   }, [gameId]);
 
