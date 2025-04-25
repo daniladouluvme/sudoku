@@ -1,6 +1,6 @@
 import { Router, type RequestHandler } from "express";
 import { isObject } from "lodash";
-import type { Model } from "mongoose";
+import { type Model } from "mongoose";
 import { verifyToken } from "../../database/utils/verify-token";
 
 export const createCrudRouter = (model: Model<any>, options?: CrudOptions) => {

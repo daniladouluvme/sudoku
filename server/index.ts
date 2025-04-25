@@ -1,10 +1,9 @@
 import config from "@config";
 import { createServer } from "./http/create-server";
 import { connectDatabase } from "./database/connect-database";
-import { handleWebSocket } from "./socket/handle-websocket";
 import { handleServer } from "./http/handle-server";
-import http from 'http';
-import { WebSocketServer } from "ws";
+import http from "http";
+import { WebSocketServer } from "./socket/web-socket-server";
 
 const SERVER_PORT = config.server.port;
 
@@ -19,7 +18,9 @@ server.listen(SERVER_PORT, () => {
 });
 
 // Configuring the WebSocket
-const socket = new WebSocketServer({ noServer: true });
-handleWebSocket(socket, server);
-
+const wsServer = new WebSocketServer(server);
+expressApp.use((req, _, next) => {
+  req.wss = wsServer;
+  next();
+});
 handleServer(expressApp);
