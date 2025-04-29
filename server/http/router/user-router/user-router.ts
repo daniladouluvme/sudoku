@@ -145,7 +145,7 @@ export const userRouter = (): Router => {
     res.status(204).send();
   });
 
-  router.post("/verify", verifyToken, async (req, res): Promise<any> => {
+  router.post("/verify", async (req, res): Promise<any> => {
     const userId = getUserId(req.cookies);
     if (!userId) return res.status(401).send();
     const user = await User.findById(userId);

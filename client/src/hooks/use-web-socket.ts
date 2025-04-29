@@ -55,9 +55,14 @@ export const useWebSocket = () => {
     if (!currentUser) {
       socketService.removeHandler(handleSocketMessage);
     }
+
     if (currentUser && currentUser._id !== prevUser?._id) {
       socketService.removeHandler(handleSocketMessage);
       socketService.addHandler(handleSocketMessage);
     }
+
+    return () => {
+      socketService.removeHandler(handleSocketMessage);
+    };
   }, [currentUser]);
 };
