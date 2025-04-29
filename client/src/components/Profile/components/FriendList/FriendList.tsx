@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { FriendListItem } from "./components/FriendListItem";
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { User } from "@model/user.model";
 
 interface Props {

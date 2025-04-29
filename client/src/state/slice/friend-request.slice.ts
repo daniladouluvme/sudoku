@@ -18,8 +18,8 @@ const friendRequestSlice = createSlice({
       const i = state.findIndex((fr) => fr._id === action.payload._id);
       if (i !== -1) state[i] = action.payload;
     },
-    deleteFriendRequest: (state, action: PayloadAction<string>) =>
-      state.filter((fr) => fr._id !== action.payload),
+    deleteFriendRequest: (state, action: PayloadAction<FriendRequest>) =>
+      state.filter((fr) => fr._id !== action.payload._id),
   },
 });
 

@@ -12,7 +12,7 @@ import {
   addFriend,
   deleteFriend as deleteFriendAction,
 } from "@state/slice/friend.slice";
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { useService } from "./use-service";
 
 export const useFriend = () => {
@@ -65,7 +65,7 @@ export const useFriend = () => {
     try {
       await friendRequestService.deleteFriendRequest(friendRequest._id);
 
-      dispatch(deleteFriendRequest(friendRequest._id));
+      dispatch(deleteFriendRequest(friendRequest));
     } catch (error) {
       console.error(error);
     }
@@ -112,10 +112,9 @@ export const useFriend = () => {
 
   const cancelFriendRequest = async (friendRequest: FriendRequest) => {
     dispatch(setBackdrop({ loading: true }));
-    const id = friendRequest._id;
     try {
-      await friendRequestService.deleteFriendRequest(id);
-      dispatch(deleteFriendRequest(id));
+      await friendRequestService.deleteFriendRequest(friendRequest._id);
+      dispatch(deleteFriendRequest(friendRequest));
     } catch (error) {
       console.error(error);
       dispatch(
@@ -130,16 +129,11 @@ export const useFriend = () => {
 
   const deleteFriend = async (friend: Friend) => {
     dispatch(setBackdrop({ loading: true }));
-
-    const id = friend._id;
-
     try {
-      await friendService.deleteFriend(id);
-
-      dispatch(deleteFriendAction(id));
+      await friendService.deleteFriend(friend._id);
+      dispatch(deleteFriendAction(friend));
     } catch (error) {
       console.error(error);
-
       dispatch(
         patchBackdrop({
           error: "An unknown error occurred while deleting a friend",

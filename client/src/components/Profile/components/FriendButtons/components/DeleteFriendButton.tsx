@@ -1,6 +1,6 @@
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { IconButton, IconButtonProps, Tooltip } from "@mui/material";
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { useFriend } from "@hooks";
 
 interface Props {

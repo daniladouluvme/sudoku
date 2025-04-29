@@ -1,4 +1,4 @@
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: Friend[] = [];
@@ -11,8 +11,8 @@ const friendSlice = createSlice({
     addFriend: (state, action: PayloadAction<Friend>) => {
       state.push(action.payload);
     },
-    deleteFriend: (state, action: PayloadAction<string>) =>
-      state.filter((fr) => fr._id !== action.payload),
+    deleteFriend: (state, action: PayloadAction<Friend>) =>
+      state.filter((fr) => fr._id !== action.payload._id),
   },
 });
 

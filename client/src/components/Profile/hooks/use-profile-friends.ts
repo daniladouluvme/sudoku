@@ -1,6 +1,6 @@
 import { useAppSelector } from "@hooks/state";
 import { useService } from "@hooks/use-service";
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { useEffect, useState } from "react";
 
 export const useProfileFriends = (userId: string): Friend[] => {

@@ -3,7 +3,7 @@ import { Sudoku } from "@components/Sudoku/Sudoku";
 import { useAppSelector, useService } from "@hooks";
 import { Game as IGame } from "@model/game.model";
 import { Box, Divider, Typography } from "@mui/material";
-import { isGameMove } from "@utils/game-move";
+import { isGameMove } from "@utils/is-game-move";
 import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";

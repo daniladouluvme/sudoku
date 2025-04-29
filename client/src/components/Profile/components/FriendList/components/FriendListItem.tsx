@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { UserInfo } from "../../UserInfo";
 import { useAppSelector } from "@hooks/state";
 import { DeleteFriendButton } from "../../FriendButtons/components/DeleteFriendButton";
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 
 interface Props {
   friend: Friend;

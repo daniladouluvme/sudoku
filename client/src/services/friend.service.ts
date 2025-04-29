@@ -1,4 +1,4 @@
-import { Friend } from "@model/friend.modle";
+import { Friend } from "@model/friend.model";
 import { ApiService } from "./api.service";
 import axios from "axios";
 import { User } from "@model/user.model";

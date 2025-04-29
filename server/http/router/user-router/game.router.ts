@@ -7,7 +7,7 @@ import { GameRequest } from "@dbmodel/game-request.model";
 
 export const gameRouter = () => {
   const router = createCrudRouter(Game, {
-    patch: true,
+    patch: { requestHandlers: [verifyToken] },
   });
 
   router.get("/", verifyToken, async (req, res): Promise<any> => {

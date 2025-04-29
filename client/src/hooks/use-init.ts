@@ -6,6 +6,7 @@ import { setFriendRequests } from "@state/slice/friend-request.slice";
 import { setFriends } from "@state/slice/friend.slice";
 import { useService } from "./use-service";
 import { usePrevious } from "./use-previous";
+import { useWebSocket } from "./use-web-socket";
 
 export const useInit = () => {
   const {
@@ -28,6 +29,8 @@ export const useInit = () => {
       socketRef.current?.close();
     };
   }, []);
+
+  useWebSocket();
 
   useEffect(() => {
     isVerificationEnded && initData();
