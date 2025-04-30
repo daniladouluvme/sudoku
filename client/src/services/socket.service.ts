@@ -14,5 +14,7 @@ export class SocketService {
     this.handlers.forEach((h) => h?.(message));
   }
 
-  public send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {}
+  public send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
+    console.log(data);
+  }
 }

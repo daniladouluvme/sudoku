@@ -5,6 +5,10 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "./",
+  build: {
+    assetsDir: "./assets",
+  },
   server: {
     proxy: {
       "/api": {
