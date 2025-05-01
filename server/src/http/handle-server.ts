@@ -5,9 +5,9 @@ import { apiRouter } from "./router/api-router";
 export const handleServer = (app: Express) => {
   app.use("/api", apiRouter());
 
-  app.use(staticMiddleware(join(__dirname, "../dist")));
+  app.use(staticMiddleware(join(__dirname, "../../dist")));
 
   app.get("*", (_, res) => {
-    res.sendFile(join(__dirname, "../dist", "index.html"));
+    res.sendFile(join(__dirname, "../../dist", "index.html"));
   });
 };

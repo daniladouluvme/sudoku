@@ -1,9 +1,9 @@
 import config from "@config";
-import { createServer } from "./http/create-server";
-import { connectDatabase } from "./database/connect-database";
-import { handleServer } from "./http/handle-server";
+import { createServer } from "./src/http/create-server";
+import { connectDatabase } from "./src/database/connect-database";
+import { handleServer } from "./src/http/handle-server";
 import http from "http";
-import { WebSocketServer } from "./socket/web-socket-server";
+import { WebSocketServer } from "./src/socket/web-socket-server";
 
 const SERVER_PORT = config.server.port;
 

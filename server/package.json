@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --hot ."
+    "dev": "bun --hot .",
+    "build": "bun build.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
