@@ -23,5 +23,5 @@ interface IAppConfig {
   database: IDatabaseConfig;
   email: IEmailConfig;
 }
-123
+
 export default config as IAppConfig & IConfig;

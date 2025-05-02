@@ -26,7 +26,7 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "@config": ["./src/config/config.ts"],
+      "@config": ["./config/config.ts"],
       "@dbmodel/*": ["./src/database/model/*"],
       "@utils/*": ["./src/utils/*"]
     }

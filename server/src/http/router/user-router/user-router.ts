@@ -60,7 +60,7 @@ export const userRouter = (): Router => {
       const existByEmail = await User.findOne({ email });
       if (existByEmail) return res.status(409).send({ email: true });
 
-      const hashedPassword = hashSync(password, 12);
+      const hashedPassword = hashSync(password);
       const user = await User.create({
         login,
         password: hashedPassword,
@@ -76,12 +76,14 @@ export const userRouter = (): Router => {
 
       const transporter = createTransport({
         service: config.email.service,
-        port: 567,
+        port: 587,
         secure: false,
         auth: {
           user: config.email.user,
           pass: config.email.pass,
         },
+        logger: true,
+        debug: true,
       });
 
       const mailOptions = {

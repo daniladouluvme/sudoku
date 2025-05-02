@@ -58,7 +58,7 @@ export const useInit = () => {
       if (currentUser && currentUser._id !== prevUser?._id) {
         socketRef.current?.close();
         socketRef.current = new WebSocket(
-          `ws://${window.location.hostname}:9999/ws`
+          `ws://${window.location.hostname}/ws`
         );
         socketRef.current.onmessage =
           socketService.hanleMessage.bind(socketService);
