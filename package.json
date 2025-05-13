@@ -4,11 +4,17 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "build:client": "cd ./client && bun run build",
+    "build:server": "cd ./server && bun run build",
+    "build:app": "concurrently \"bun run build:client\" \"bun run build:server\" \"bun run copy:config\"",
+    "copy:config": "shx mkdir -p ./build/config && shx cp ./server/config/_default.json ./build/config/default.json",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "cz-conventional-changelog": "^3.3.0"
+    "concurrently": "^9.1.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "shx": "^0.4.0"
   },
   "peerDependencies": {
     "typescript": "^5"

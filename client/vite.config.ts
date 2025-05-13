@@ -8,6 +8,7 @@ export default defineConfig({
   base: "./",
   build: {
     assetsDir: "./assets",
+    outDir: "../build/dist",
   },
   server: {
     proxy: {

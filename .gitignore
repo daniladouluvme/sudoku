@@ -23,4 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
 server/config/*.json
+!server/config/_default.json

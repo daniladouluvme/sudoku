@@ -1,0 +1,17 @@
+{
+  "server": {
+    "port": 80
+  },
+  "origins": [],
+  "database": {
+    "host": "",
+    "user": "",
+    "password": ""
+  },
+  "jwtSecretKey": "",
+  "email": {
+    "service": "",
+    "user": "",
+    "pass": ""
+  }
+}
