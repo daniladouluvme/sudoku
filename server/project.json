@@ -1,0 +1,36 @@
+{
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "name": "server",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun build server/index.ts --outfile build/index.js --minify --target bun",
+        "cwd": "."
+      },
+      "dependsOn": ["copy-config"]
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun --hot index.ts",
+        "cwd": "server"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun index.js",
+        "cwd": "build"
+      }
+    },
+    "copy-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bunx shx mkdir -p build/config && bunx shx cp server/config/_default.json build/config/default.json",
+        "cwd": "."
+      }
+    }
+  }
+}

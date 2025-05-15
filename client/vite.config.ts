@@ -4,6 +4,7 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  root: __dirname,
   plugins: [react()],
   base: "./",
   build: {
@@ -13,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:9999",
+        target: "http://localhost:80",
         changeOrigin: true,
         secure: false,
       },

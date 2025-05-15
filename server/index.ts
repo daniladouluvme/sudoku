@@ -1,3 +1,4 @@
+process.env.NODE_CONFIG_DIR = `${__dirname}/config`
 import config from "@config";
 import { createServer } from "./src/http/create-server";
 import { connectDatabase } from "./src/database/connect-database";

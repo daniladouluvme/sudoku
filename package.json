@@ -1,6 +1,7 @@
 {
-  "version": "0.1.0",
   "name": "esudoku",
+  "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
   "private": true,
   "scripts": {
@@ -10,11 +11,73 @@
     "copy:config": "shx mkdir -p ./build/config && shx cp ./server/config/_default.json ./build/config/default.json",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/icons-material": "^7.0.0",
+    "@mui/material": "^7.0.0",
+    "@reduxjs/toolkit": "^2.6.1",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "lodash": "^4.17.21",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.4.0",
+    "bcryptjs": "^3.0.2",
+    "config": "^3.3.12",
+    "cookie": "^1.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "nodemailer": "^6.10.0",
+    "ws": "^8.18.1"
+  },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@nx/express": "21.0.3",
+    "@nx/js": "21.0.3",
+    "@nx/node": "21.0.3",
+    "@nx/react": "21.0.3",
+    "@nx/vite": "21.0.3",
+    "@nx/web": "21.0.3",
+    "@nx/webpack": "21.0.3",
+    "@nx/workspace": "21.0.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "@svgr/webpack": "^8.0.1",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
     "@types/bun": "latest",
+    "@types/config": "^3.3.5",
+    "@types/cookie": "^1.0.0",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/lodash": "^4.17.16",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.13",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
     "cz-conventional-changelog": "^3.3.0",
-    "shx": "^0.4.0"
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "nx": "21.0.3",
+    "sass": "^1.86.0",
+    "shx": "^0.4.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -23,5 +86,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "nx": {},
+  "workspaces": [
+    "client",
+    "server"
+  ]
 }

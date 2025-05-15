@@ -26,3 +26,7 @@ dist-ssr
 
 server/config/*.json
 !server/config/_default.json
+
+
+.nx/cache
+.nx/workspace-data
