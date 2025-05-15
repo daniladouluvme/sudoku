@@ -5,10 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build:client": "cd ./client && bun run build",
-    "build:server": "cd ./server && bun run build",
-    "build:app": "concurrently \"bun run build:client\" \"bun run build:server\" \"bun run copy:config\"",
-    "copy:config": "shx mkdir -p ./build/config && shx cp ./server/config/_default.json ./build/config/default.json",
+    "dev:app": "bunx nx run-many --targets=dev",
+    "build:app": "bunx nx run-many --targets=build",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
