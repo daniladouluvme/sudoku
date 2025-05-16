@@ -150,6 +150,7 @@ export const Sudoku = ({ game, setValue }: Props) => {
                 minWidth: "100%",
                 fontSize,
               }}
+              disabled={disabled}
               onClick={() => handleSetValueRef.current(n)}
             >
               {n}
