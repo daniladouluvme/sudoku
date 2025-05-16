@@ -3,18 +3,21 @@ import { Cell } from "./components";
 import { Box, Button } from "@mui/material";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Grid } from "./components/Grid";
+import { SimpleBackdrop } from "@components/shared";
 
 interface Props {
   game: Game;
+  showWinWindow?: boolean;
   setValue: (index: number, value: number) => void;
 }
 
-export const Sudoku = ({ game, setValue }: Props) => {
+export const Sudoku = ({ game, showWinWindow = true, setValue }: Props) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState<string>("0px");
   const [fontSize, setFontSize] = useState<string>("1rem");
   const [selectedCell, setSelectedCell] = useState<number>();
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [winWindowOpenned, setWinWindowOpenned] = useState<boolean>(false);
   const selectedCellRef = useRef(null);
   const setValueRef = useRef(null);
   const handleSetValueRef = useRef(null);
@@ -37,6 +40,12 @@ export const Sudoku = ({ game, setValue }: Props) => {
       }
     };
   }, [game]);
+
+  useEffect(() => {
+    if (disabled && game.solvedSudoku[0]) {
+      setWinWindowOpenned(true);
+    }
+  }, [disabled]);
 
   // useLayoutEffect is used to turn off the highlight before rendering
   useLayoutEffect(() => {
@@ -158,6 +167,13 @@ export const Sudoku = ({ game, setValue }: Props) => {
           </Box>
         ))}
       </Box>
+      {showWinWindow && (
+        <SimpleBackdrop
+          open={winWindowOpenned}
+          message="Congratulations! You've won!"
+          close={() => setWinWindowOpenned(false)}
+        />
+      )}
     </Box>
   );
 };
