@@ -12,6 +12,9 @@ export default defineConfig({
     outDir: "../build/dist",
   },
   server: {
+    fs: {
+      allow: [path.resolve(__dirname, "../node_modules/@fontsource")],
+    },
     proxy: {
       "/api": {
         target: "http://localhost:80",
