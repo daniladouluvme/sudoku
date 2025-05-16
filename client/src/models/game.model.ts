@@ -6,7 +6,6 @@ export interface Game {
   solvedSudoku: number[];
   notSolvedSudoku: number[];
   initialSudoku: number[];
-  solved: boolean;
   _id: string;
   __v: string;
 }

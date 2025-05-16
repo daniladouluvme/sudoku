@@ -76,8 +76,7 @@ export const gameRouter = () => {
         date: new Date(),
         solvedSudoku,
         notSolvedSudoku,
-        initialSudoku: notSolvedSudoku,
-        solved: false,
+        initialSudoku: notSolvedSudoku
       });
       res.send(game);
     } catch (error) {
