@@ -1,7 +1,7 @@
 import { Game } from "@model/game.model";
 import { Cell } from "./components";
 import { Box, Button } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Grid } from "./components/Grid";
 
 interface Props {
@@ -14,6 +14,7 @@ export const Sudoku = ({ game, setValue }: Props) => {
   const [cellSize, setCellSize] = useState<string>("0px");
   const [fontSize, setFontSize] = useState<string>("1rem");
   const [selectedCell, setSelectedCell] = useState<number>();
+  const [disabled, setDisabled] = useState<boolean>(false);
   const selectedCellRef = useRef(null);
   const setValueRef = useRef(null);
   const handleSetValueRef = useRef(null);
@@ -35,6 +36,17 @@ export const Sudoku = ({ game, setValue }: Props) => {
         setValueRef.current(selectedCellRef.current, value);
       }
     };
+  }, [game]);
+
+  // useLayoutEffect is used to turn off the highlight before rendering
+  useLayoutEffect(() => {
+    const d =
+      JSON.stringify(game.notSolvedSudoku) ===
+      JSON.stringify(game.solvedSudoku);
+    if (d !== disabled) {
+      setDisabled(d);
+      setSelectedCell(null);
+    }
   }, [game]);
 
   useEffect(() => {
@@ -78,6 +90,10 @@ export const Sudoku = ({ game, setValue }: Props) => {
     };
   }, []);
 
+  const selectCell = (index: number) => {
+    !disabled && setSelectedCell(index);
+  };
+
   return (
     <Box
       ref={parentRef}
@@ -104,18 +120,25 @@ export const Sudoku = ({ game, setValue }: Props) => {
         {game?.notSolvedSudoku.map((c, i) => (
           <Cell
             key={i}
-            selected={i === selectedCell}
-            disabled={!!game?.initialSudoku[i]}
-            highlighted={
-              game?.notSolvedSudoku[i] > 0 &&
-              game?.notSolvedSudoku[i] === game?.notSolvedSudoku[selectedCell]
-            }
-            wrong={
-              typeof game?.notSolvedSudoku[i] === "number" &&
-              game?.notSolvedSudoku[i] !== game?.solvedSudoku[i]
-            }
             value={c}
-            selectCell={() => setSelectedCell(i)}
+            bgColor={
+              i === selectedCell
+                ? "selected"
+                : game?.notSolvedSudoku[i] > 0 &&
+                  game?.notSolvedSudoku[i] ===
+                    game?.notSolvedSudoku[selectedCell]
+                ? "highlighted"
+                : "default"
+            }
+            textColor={
+              !!game?.initialSudoku[i]
+                ? "initial"
+                : typeof game?.notSolvedSudoku[i] === "number" &&
+                  game?.notSolvedSudoku[i] !== game?.solvedSudoku[i]
+                ? "wrong"
+                : "default"
+            }
+            selectCell={() => selectCell(i)}
           />
         ))}
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (

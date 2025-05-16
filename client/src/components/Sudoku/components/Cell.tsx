@@ -1,38 +1,47 @@
 import { Box } from "@mui/material";
 
+type BgColorType = "selected" | "highlighted" | "default";
+type TextColorType = "wrong" | "initial" | "default";
+
 interface Props {
   value: number;
-  disabled?: boolean;
-  highlighted?: boolean;
-  selected?: boolean;
-  wrong?: boolean;
+  bgColor: BgColorType;
+  textColor: TextColorType;
   selectCell: () => void;
 }
 
+const bgColorMapper: { [f in BgColorType]: string } = {
+  default: "#222",
+  highlighted: "#333",
+  selected: "#555",
+};
+
+const textColorMapper: { [f in TextColorType]: string } = {
+  default: "#inherit",
+  wrong: "#f00",
+  initial: "#999",
+};
+
 export const Cell = ({
   value,
-  disabled,
-  highlighted,
-  selected,
-  wrong,
+  bgColor = "default",
+  textColor = "default",
   selectCell,
 }: Props) => {
-  const handleClick = () => selectCell();
-
   return (
     <Box
-      onClick={handleClick}
+      onClick={selectCell}
       sx={{
-        backgroundColor: selected ? "#555" : highlighted ? "#333" : "#222",
+        backgroundColor: bgColorMapper[bgColor],
         display: "flex",
-        color: wrong ? "#ff0000" : disabled ? "#999" : "inherit",
+        color: textColorMapper[textColor],
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
         userSelect: "none",
       }}
     >
-      {value ? value : ""}
+      {value || ""}
     </Box>
   );
 };
