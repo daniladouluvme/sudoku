@@ -74,20 +74,10 @@ export const userRouter = (): Router => {
         validUntil: new Date(+new Date() + 9e5),
       });
 
-      const transporter = createTransport({
-        service: config.email.service,
-        port: 587,
-        secure: false,
-        auth: {
-          user: config.email.user,
-          pass: config.email.pass,
-        },
-        logger: true,
-        debug: true,
-      });
+      const transporter = createTransport({...config.email});
 
       const mailOptions = {
-        from: config.email.user,
+        from: config.email.auth.user,
         to: email,
         subject: "Email Verification",
         text: `Code: ${verification.code}`,

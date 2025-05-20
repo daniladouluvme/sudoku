@@ -11,9 +11,15 @@ interface IServerConfig {
 }
 
 interface IEmailConfig {
-  service: string;
-  user: string;
-  pass: string;
+  host: string;
+  port: number;
+  secure: boolean;
+  auth: {
+    user: string;
+    pass: string;
+  };
+  logger: boolean;
+  debug: boolean;
 }
 
 interface IAppConfig {
