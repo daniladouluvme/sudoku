@@ -1,34 +1,53 @@
 import DehazeIcon from "@mui/icons-material/Dehaze";
-import { IconButton, IconButtonOwnProps, Menu } from "@mui/material";
-import { MouseEvent, useState } from "react";
-import { MenuItemLink } from "../MenuItemLink";
+import ExtensionIcon from "@mui/icons-material/Extension";
+import PersonIcon from "@mui/icons-material/Person";
+import {
+  Drawer,
+  IconButton,
+  IconButtonOwnProps,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import { useState } from "react";
 import { useAppSelector } from "@hooks";
+import { Link } from "react-router";
 
 export const MainMenu = (props: IconButtonOwnProps) => {
-  const [anchor, setAnchor] = useState<HTMLElement>(null);
+  const [open, setOpen] = useState<boolean>(false);
   const user = useAppSelector((s) => s.user);
-
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setAnchor(e.currentTarget);
-  };
-
-  const handleClose = () => setAnchor(null);
 
   return user ? (
     <>
-      <IconButton {...props} size="medium" onClick={handleClick}>
+      <IconButton {...props} size="medium" onClick={() => setOpen(true)}>
         <DehazeIcon />
       </IconButton>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchor}
-        open={!!anchor}
-        onClose={handleClose}
-      >
-        <MenuItemLink to="users">Users</MenuItemLink>
-        <MenuItemLink to="games">Games</MenuItemLink>
-      </Menu>
+      <Drawer open={open} onClose={() => setOpen(false)}>
+        <List>
+          <ListItemButton
+            component={Link}
+            to="users"
+            onClick={() => setOpen(false)}
+          >
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary="Users" />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="games"
+            onClick={() => setOpen(false)}
+          >
+            <ListItemIcon>
+              <ExtensionIcon />
+            </ListItemIcon>
+            <ListItemText primary="Games" />
+          </ListItemButton>
+        </List>
+      </Drawer>
     </>
   ) : (
     <IconButton size="medium" sx={{ visibility: "hidden" }}>
