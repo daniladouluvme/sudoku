@@ -47,12 +47,7 @@ export const InviteFriend = ({ game, invite }: Props) => {
         <PersonAddIcon />
       </IconButton>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchor}
-        open={!!anchor}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchor} open={!!anchor} onClose={handleClose}>
         {users.map((u) => (
           <MenuItem key={u._id} onClick={() => handleGameRequest(u)}>
             {u.login}

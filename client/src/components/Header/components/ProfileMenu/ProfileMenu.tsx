@@ -39,12 +39,7 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
         </Badge>
       </IconButton>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchor}
-        open={!!anchor}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchor} open={!!anchor} onClose={handleClose}>
         {user
           ? [
               <MenuItemLink key={1} to={`users/${user._id}`}>

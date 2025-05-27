@@ -4,6 +4,7 @@ import { verifyToken } from "../../../database/utils/verify-token";
 import { getUserId } from "../../../utils/get-user-id";
 import { SudokuGenerator } from "../../../utils/sudoku";
 import { GameRequest } from "@dbmodel/game-request.model";
+import type { Request } from "express";
 
 export const gameRouter = () => {
   const router = createCrudRouter(Game, {
@@ -66,24 +67,35 @@ export const gameRouter = () => {
     }
   });
 
-  router.post("/", verifyToken, async (req, res): Promise<any> => {
-    try {
-      const { solvedSudoku, notSolvedSudoku } = new SudokuGenerator(
-        40
-      ).getSudoku();
-      const game = await Game.create({
-        user: getUserId(req.cookies),
-        date: new Date(),
-        solvedSudoku,
-        notSolvedSudoku,
-        initialSudoku: notSolvedSudoku
-      });
-      res.send(game);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send();
+  router.post(
+    "/",
+    verifyToken,
+    async (
+      req: Request<any, any, any, { difficulty?: string }>,
+      res
+    ): Promise<any> => {
+      try {
+        const { difficulty } = req.query;
+        const parsedDifficulty = parseInt(difficulty);
+
+        const { notSolvedSudoku, solvedSudoku } = new SudokuGenerator(
+          isNaN(parsedDifficulty) ? 40 : parsedDifficulty
+        ).getSudoku();
+
+        const game = await Game.create({
+          user: getUserId(req.cookies),
+          date: new Date(),
+          solvedSudoku,
+          notSolvedSudoku,
+          initialSudoku: notSolvedSudoku,
+        });
+        res.send(game);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send();
+      }
     }
-  });
+  );
 
   return router;
 };

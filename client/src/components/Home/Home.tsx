@@ -6,16 +6,18 @@ import { Box } from "@mui/material";
 import { emptyGame } from "@utils/empty-game";
 import { cloneDeep } from "lodash";
 import { useCallback, useEffect, useState } from "react";
-import { RegenerateButton } from "./components";
+import { RegenerateButton, SettingsButton } from "./components";
+import { DIFFICULTIES } from "@utils/difficulties";
 
 export const Home = () => {
   const { gameService } = useService();
   const [game, setGame] = useState<Game>();
   const [loading, setLoading] = useState(true);
+  const [difficulty, setDifficulty] = useState(DIFFICULTIES.normal);
 
   const createGame = () => {
     gameService
-      .createUnauthorizedGame()
+      .createUnauthorizedGame(difficulty)
       .then(setGame)
       .catch((error) => {
         setGame(emptyGame());
@@ -51,12 +53,15 @@ export const Home = () => {
           overflow: "hidden",
         }}
       >
-        <RegenerateButton
-          sx={{
-            alignSelf: "flex-end",
-          }}
-          onClick={createGame}
-        />
+        <Box
+          sx={{ display: "flex", justifyContent: "flex-end", rowGap: "1rem" }}
+        >
+          <SettingsButton
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+          />
+          <RegenerateButton onClick={createGame} />
+        </Box>
         <Sudoku game={game} setValue={setValue} />
       </Box>
     </Loading>
