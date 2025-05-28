@@ -1,7 +1,14 @@
 import SettingsIcon from "@mui/icons-material/Settings";
-import { IconButton, IconButtonProps, Menu, MenuItem } from "@mui/material";
+import {
+  IconButton,
+  IconButtonProps,
+  Menu,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
 import { DIFFICULTIES } from "@utils/difficulties";
 import { MouseEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   difficulty: number;
@@ -17,6 +24,7 @@ export const SettingsButton = ({
   const [mainMenuAnchor, setMainMenuAnchor] = useState<HTMLElement>(null);
   const [difficultyMenyAnchor, setDifficultyMenyAnchor] =
     useState<HTMLElement>(null);
+  const { t } = useTranslation();
 
   const openMainMenu = (e: MouseEvent<HTMLButtonElement>) => {
     setMainMenuAnchor(e.currentTarget);
@@ -34,16 +42,18 @@ export const SettingsButton = ({
 
   return (
     <>
-      <IconButton {...buttonProps} size="medium" onClick={openMainMenu}>
-        <SettingsIcon />
-      </IconButton>
+      <Tooltip title={t("home.settings")}>
+        <IconButton {...buttonProps} size="medium" onClick={openMainMenu}>
+          <SettingsIcon />
+        </IconButton>
+      </Tooltip>
 
       <Menu
         anchorEl={mainMenuAnchor}
         open={!!mainMenuAnchor}
         onClose={closeMainMenu}
       >
-        <MenuItem onClick={openDifficultyMenu}>Difficulty</MenuItem>
+        <MenuItem onClick={openDifficultyMenu}>{t("difficulty")}</MenuItem>
       </Menu>
 
       <Menu
@@ -57,7 +67,7 @@ export const SettingsButton = ({
             onClick={() => setDifficulty(v)}
             selected={v === difficulty}
           >
-            {k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()}
+            {t(`difficultyLevel.${k}`)}
           </MenuItem>
         ))}
       </Menu>

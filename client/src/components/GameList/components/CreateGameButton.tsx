@@ -12,10 +12,12 @@ import {
 } from "@mui/material";
 import { DIFFICULTIES } from "@utils/difficulties";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 export const CreateGameButton = (props: ButtonProps) => {
   const { gameService } = useService();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [difficulty, setDifficulty] = useState(DIFFICULTIES.normal);
@@ -40,7 +42,7 @@ export const CreateGameButton = (props: ButtonProps) => {
   return (
     <>
       <Button {...props} variant="outlined" color="inherit" onClick={openModal}>
-        Create game
+        {t("createGame")}
       </Button>
 
       <Modal open={modalOpen}>
@@ -61,14 +63,14 @@ export const CreateGameButton = (props: ButtonProps) => {
           }}
         >
           <FormControl>
-            <FormLabel>Difficulty</FormLabel>
+            <FormLabel>{t("difficulty")}</FormLabel>
             <RadioGroup value={difficulty} onChange={handleDifficultyChange}>
               {Object.entries(DIFFICULTIES).map(([k, v]) => (
                 <FormControlLabel
                   key={k}
                   value={v}
                   control={<Radio />}
-                  label={k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()}
+                  label={t(`difficultyLevel.${k}`)}
                 />
               ))}
             </RadioGroup>
@@ -80,7 +82,7 @@ export const CreateGameButton = (props: ButtonProps) => {
               color="inherit"
               onClick={closeModal}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               {...props}
@@ -88,7 +90,7 @@ export const CreateGameButton = (props: ButtonProps) => {
               color="inherit"
               onClick={createGame}
             >
-              Ok
+              {t("ok")}
             </Button>
           </Box>
         </Box>

@@ -7,15 +7,18 @@ import {
   MenuItem,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import { MenuItemLink } from "../MenuItemLink";
+import { MenuItemLink } from "./MenuItemLink";
 import { useAppDispatch, useAppSelector } from "@hooks/state";
 import { logout } from "@state/slice/user.slice";
+import { useTranslation } from "react-i18next";
 
 export const ProfileMenu = (props: IconButtonOwnProps) => {
   const dispatch = useAppDispatch();
   const [anchor, setAnchor] = useState<HTMLElement>(null);
   const user = useAppSelector((s) => s.user);
+  const { t } = useTranslation();
   const friendRequests = useAppSelector((s) => s.friendRequests);
+
   const notifications = friendRequests.filter(
     (fr) => fr.to === user?._id && !fr.declined
   ).length;
@@ -43,18 +46,18 @@ export const ProfileMenu = (props: IconButtonOwnProps) => {
         {user
           ? [
               <MenuItemLink key={1} to={`users/${user._id}`}>
-                Profile
+                {t("header.profile.profile")}
               </MenuItemLink>,
               <MenuItem key={2} onClick={handleLogout}>
-                Logout
+                {t("header.profile.logout")}
               </MenuItem>,
             ]
           : [
               <MenuItemLink key={1} to="login">
-                Login
+                {t("authorization")}
               </MenuItemLink>,
               <MenuItemLink key={2} to="register">
-                Register
+                {t("register")}
               </MenuItemLink>,
             ]}
       </Menu>

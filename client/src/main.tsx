@@ -24,6 +24,7 @@ import { Main } from "@components/Main/Main.tsx";
 import { ServiceProvider } from "@providers/service.provider.tsx";
 import { GameList } from "@components/GameList/GameList.tsx";
 import { Game } from "@components/Game/Game.tsx";
+import "@utils/i18n";
 
 const darkTheme = createTheme({
   palette: {

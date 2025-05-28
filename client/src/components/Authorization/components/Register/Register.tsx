@@ -12,9 +12,11 @@ import { useRegisterForm } from "@components/Authorization/hooks/use-register-fo
 import { useAppDispatch } from "@hooks/state";
 import { clearBackdrop, setBackdrop } from "@state/slice/backdrop.slice";
 import { useService } from "@hooks/use-service";
+import { useTranslation } from "react-i18next";
 
 export const Register = () => {
   const { authorizationService } = useService();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -37,11 +39,11 @@ export const Register = () => {
       })
       .catch((error: AxiosError<{ login?: boolean; email?: boolean }>) => {
         console.error(error);
-        let errorMessage = "An unknown error occurred during registration";
+        let errorMessage = t("error.unknown");
         if (error.status === 409) {
           const { login, email } = error.response.data ?? {};
-          if (login) errorMessage = "The user with this login already exists";
-          if (email) errorMessage = "The user with this email already exists";
+          if (login) errorMessage = t("error.userLoginExist");
+          if (email) errorMessage = t("error.userEmailExist");
         }
         dispatch(setBackdrop({ error: errorMessage }));
       });
@@ -57,14 +59,14 @@ export const Register = () => {
         }}
       >
         <Divider>
-          <Typography variant="h5">Register</Typography>
+          <Typography variant="h5">{t("register")}</Typography>
         </Divider>
         <LoginField {...form} />
         <EmailField {...form} />
         <PasswordField {...form} />
         <RepeatPasswordField {...form} />
         <Button type="submit" variant="outlined" sx={{ alignSelf: "flex-end" }}>
-          Register
+          {t("register")}
         </Button>
       </Box>
     </form>

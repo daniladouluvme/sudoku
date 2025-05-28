@@ -1,0 +1,55 @@
+{
+  "authorization": "Login",
+  "login": "Login",
+  "email": "Email",
+  "register": "Regiser",
+  "password": "Password",
+  "repeatPassword": "Repeat Password",
+  "difficulty": "Difficulty",
+  "createGame": "Create game",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "invite": "Invite",
+  "header": {
+    "profile": {
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+    "menu": {
+      "users": "Users",
+      "games": "Games"
+    }
+  },
+  "home": {
+    "settings": "Settings",
+    "regenerate": "Regenerate sudoku"
+  },
+  "difficultyLevel": {
+    "easy": "Easy",
+    "normal": "Normal",
+    "hard": "Hard"
+  },
+  "friend": {
+    "accept": "Accept friend request",
+    "cancel": "Cancel friend request",
+    "decline": "Decline friend request",
+    "delete": "Delete friend",
+    "request": "Friend request"
+  },
+  "validationError": {
+    "required": "Required",
+    "passwordsMatch": "Passwords don't match",
+    "passwordTemplate": "The password must contain an uppercase, lowercase letter, a number, and a special character",
+    "emailTemplate": "Incorrect email format",
+    "loginTemplate": "Only letters, numbers, underscores, and dots are allowed for login",
+    "minLength": "The length must be at least {{count}} characters"
+  },
+  "error": {
+    "unknown": "An unknown error has occurred",
+    "alreadyAddedAsFriend": "The user has already been added as a friend",
+    "userWasNotFound": "The user was not found",
+    "emailNotVerified": "The user's email has not been verified",
+    "userLoginExist": "The user with this login already exists",
+    "userEmailExist": "The user with this email already exists"
+  }
+}

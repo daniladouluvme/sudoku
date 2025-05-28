@@ -8,9 +8,11 @@ import { AxiosError } from "axios";
 import { ILoginForm } from "../models/login-form.model";
 import { clearBackdrop, setBackdrop } from "@state/slice/backdrop.slice";
 import { useService } from "@hooks/use-service";
+import { useTranslation } from "react-i18next";
 
 export const Login = () => {
   const { authorizationService } = useService();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const {
@@ -37,15 +39,15 @@ export const Login = () => {
           error: AxiosError<{ notFound?: boolean; emailNotVerified?: boolean }>
         ) => {
           console.error(error);
-          let errorMessage = "An unknown error occurred during authorization";
+          let errorMessage = t("error.unknown");
           if (error.status === 404) {
             const { notFound } = error.response.data ?? {};
-            if (notFound) errorMessage = "The user was not found";
+            if (notFound) errorMessage = t("error.userWasNotFound");
           }
 
           if (error.status === 403) {
             const { emailNotVerified } = error.response.data ?? {};
-            if (emailNotVerified) errorMessage = "The user's email has not been verified";
+            if (emailNotVerified) errorMessage = t("error.emailNotVerified");
           }
           dispatch(setBackdrop({ error: errorMessage }));
         }
@@ -62,25 +64,25 @@ export const Login = () => {
         }}
       >
         <Divider>
-          <Typography variant="h5">Login</Typography>
+          <Typography variant="h5">{t("authorization")}</Typography>
         </Divider>
         <TextField
-          label="Login"
+          label={t("login")}
           variant="outlined"
           {...register("login", {
-            required: "Login required",
+            required: t("validationError.required"),
           })}
           {...handleFieldError("login", errors)}
         />
         <AuthorizationPasswordField
-          label="Password"
+          label={t("password")}
           {...register("password", {
-            required: "Password required",
+            required: t("validationError.required"),
           })}
           {...handleFieldError("password", errors)}
         />
         <Button type="submit" variant="outlined" sx={{ alignSelf: "flex-end" }}>
-          Login
+          {t("authorization")}
         </Button>
       </Box>
     </form>

@@ -17,22 +17,26 @@
     "@mui/material": "^7.0.0",
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
-    "dotenv": "^16.4.7",
-    "lodash": "^4.17.21",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-hook-form": "^7.54.2",
-    "react-redux": "^9.2.0",
-    "react-router": "^7.4.0",
     "bcryptjs": "^3.0.2",
     "config": "^3.3.12",
     "cookie": "^1.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "i18next": "^25.2.1",
+    "i18next-browser-languagedetector": "^8.1.0",
+    "i18next-http-backend": "^3.0.2",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mongoose": "^8.13.0",
     "nodemailer": "^6.10.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "react-i18next": "^15.5.2",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.4.0",
     "ws": "^8.18.1"
   },
   "devDependencies": {
@@ -85,9 +89,5 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "nx": {},
-  "workspaces": [
-    "client",
-    "server"
-  ]
+  "nx": {}
 }

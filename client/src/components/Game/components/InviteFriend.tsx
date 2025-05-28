@@ -3,8 +3,9 @@ import { GameRequest } from "@model/game-request.model";
 import { Game } from "@model/game.model";
 import { User } from "@model/user.model";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   game: Game;
@@ -13,6 +14,7 @@ interface Props {
 
 export const InviteFriend = ({ game, invite }: Props) => {
   const { userService, gameRequestService } = useService();
+  const { t } = useTranslation();
   const friends = useAppSelector((s) => s.friends);
   const currentUser = useAppSelector((s) => s.user);
   const [anchor, setAnchor] = useState<HTMLElement>(null);
@@ -43,9 +45,11 @@ export const InviteFriend = ({ game, invite }: Props) => {
 
   return (
     <>
-      <IconButton size="medium" onClick={handleClick}>
-        <PersonAddIcon />
-      </IconButton>
+      <Tooltip title={t("invite")}>
+        <IconButton size="medium" onClick={handleClick}>
+          <PersonAddIcon />
+        </IconButton>
+      </Tooltip>
 
       <Menu anchorEl={anchor} open={!!anchor} onClose={handleClose}>
         {users.map((u) => (

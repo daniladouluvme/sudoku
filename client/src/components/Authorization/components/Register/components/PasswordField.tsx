@@ -1,26 +1,30 @@
 import { AuthorizationPasswordField } from "../../AuthorizationPasswordField";
 import { handleFieldError } from "../../../utils/handle-field-error";
 import { useRegisterForm } from "@components/Authorization/hooks/use-register-form";
+import { useTranslation } from "react-i18next";
 
 export const PasswordField = ({
   register,
   formState: { errors },
-}: ReturnType<typeof useRegisterForm>) => (
-  <AuthorizationPasswordField
-    label="Password"
-    {...register("password", {
-      required: "Password required",
-      minLength: {
-        value: 8,
-        message: "The password must be at least eight characters long",
-      },
-      pattern: {
-        value:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\\\]^_{|}~]).{8,}$/,
-        message:
-          "The password must contain an uppercase, lowercase letter, a number, and a special character.",
-      },
-    })}
-    {...handleFieldError("password", errors)}
-  />
-);
+}: ReturnType<typeof useRegisterForm>) => {
+  const { t } = useTranslation();
+
+  return (
+    <AuthorizationPasswordField
+      label={t("password")}
+      {...register("password", {
+        required: t("validationError.required"),
+        minLength: {
+          value: 8,
+          message: t("validationError.minLength", { count: 8 }),
+        },
+        pattern: {
+          value:
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\\\]^_{|}~]).{8,}$/,
+          message: t("validationError.passwordTemplate"),
+        },
+      })}
+      {...handleFieldError("password", errors)}
+    />
+  );
+};

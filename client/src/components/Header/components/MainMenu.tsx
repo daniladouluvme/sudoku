@@ -13,10 +13,12 @@ import {
 import { useState } from "react";
 import { useAppSelector } from "@hooks";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export const MainMenu = (props: IconButtonOwnProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const user = useAppSelector((s) => s.user);
+  const { t } = useTranslation();
 
   return user ? (
     <>
@@ -34,7 +36,7 @@ export const MainMenu = (props: IconButtonOwnProps) => {
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary="Users" />
+            <ListItemText primary={t("header.menu.users")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
@@ -44,7 +46,7 @@ export const MainMenu = (props: IconButtonOwnProps) => {
             <ListItemIcon>
               <ExtensionIcon />
             </ListItemIcon>
-            <ListItemText primary="Games" />
+            <ListItemText primary={t("header.menu.games")} />
           </ListItemButton>
         </List>
       </Drawer>

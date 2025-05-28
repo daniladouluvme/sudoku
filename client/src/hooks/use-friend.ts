@@ -14,9 +14,11 @@ import {
 } from "@state/slice/friend.slice";
 import { Friend } from "@model/friend.model";
 import { useService } from "./use-service";
+import { useTranslation } from "react-i18next";
 
 export const useFriend = () => {
   const { friendRequestService, friendService } = useService();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const friendRequest = async (user: User) => {
@@ -46,10 +48,10 @@ export const useFriend = () => {
           console.error(error);
 
           if (error instanceof AxiosError && error.status === 409) {
-            errorMessage = "The user has already been added as a friend";
+            errorMessage = t("error.alreadyAddedAsFriend");
           }
         }
-      } else errorMessage = "An unknown error occurred during friend request";
+      } else errorMessage = t("error.unknown");
 
       if (errorMessage) dispatch(patchBackdrop({ error: errorMessage }));
     }
@@ -77,10 +79,10 @@ export const useFriend = () => {
     } catch (error) {
       console.error(error);
 
-      let errorMessage = "An unknown error occurred during friend request";
+      let errorMessage = t("error.unknown");
 
       if (error instanceof AxiosError && error.status === 409) {
-        errorMessage = "The user has already been added as a friend";
+        errorMessage = t("error.alreadyAddedAsFriend");
       }
 
       dispatch(patchBackdrop({ error: errorMessage }));
@@ -102,8 +104,7 @@ export const useFriend = () => {
       console.error(error);
       dispatch(
         patchBackdrop({
-          error:
-            "An unknown error occurred during the rejection of the friend request",
+          error: t("error.unknown"),
         })
       );
     }
@@ -119,8 +120,7 @@ export const useFriend = () => {
       console.error(error);
       dispatch(
         patchBackdrop({
-          error:
-            "An unknown error occurred during the cancellation of the friend request",
+          error: t("error.unknown"),
         })
       );
     }
@@ -136,7 +136,7 @@ export const useFriend = () => {
       console.error(error);
       dispatch(
         patchBackdrop({
-          error: "An unknown error occurred while deleting a friend",
+          error: t("error.unknown"),
         })
       );
     }

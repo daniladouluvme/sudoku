@@ -1,0 +1,55 @@
+{
+  "authorization": "Вход",
+  "login": "Логин",
+  "email": "Email",
+  "register": "Регистрация",
+  "password": "Пароль",
+  "repeatPassword": "Повтор пароля",
+  "difficulty": "Сложность",
+  "createGame": "Создать игру",
+  "ok": "Подтвердить",
+  "cancel": "Отмена",
+  "invite": "Пригласить",
+  "header": {
+    "profile": {
+      "profile": "Профиль",
+      "logout": "Выход"
+    },
+    "menu": {
+      "users": "Пользователи",
+      "games": "Игры"
+    }
+  },
+  "home": {
+    "settings": "Настройки",
+    "regenerate": "Перезапустить судоку"
+  },
+  "difficultyLevel": {
+    "easy": "Легко",
+    "normal": "Нормально",
+    "hard": "Сложно"
+  },
+  "friend": {
+    "accept": "Принять запрос на дружбу",
+    "cancel": "Отменить запрос на дружбу",
+    "decline": "Отклонить запрос на дружбу",
+    "delete": "Удалить из друзей",
+    "request": "Добавить в друзья"
+  },
+  "validationError": {
+    "required": "Поле не должно быть пустым",
+    "passwordsMatch": "Пароли не совпадают",
+    "passwordTemplate": "Пароль должен содержать заглавную и строчную буквы, цифру и специальный символ",
+    "emailTemplate": "Неправильный формат email",
+    "loginTemplate": "Логин должен содержать только буквы, цифры символы подчеркивания и точки",
+    "minLength": "Длина должна быть не менее {{count}} символов"
+  },
+  "error": {
+    "unknown": "Произошла неизвестная ошибка",
+    "alreadyAddedAsFriend": "Пользователь уже добавлен в друзья",
+    "userWasNotFound": "Пользователь не найден",
+    "emailNotVerified": "Email не подтверждён",
+    "userLoginExist": "Пользователь с таким логином уже существует",
+    "userEmailExist": "Пользователь с таким email уже существует"
+  }
+}
