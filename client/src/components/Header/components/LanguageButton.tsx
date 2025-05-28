@@ -25,7 +25,7 @@ export const LanguageButton = (props: IconButtonProps) => {
             onClick={() => i18n.changeLanguage(l)}
           >
             <img
-              src={`${l}.svg`}
+              src={`/images/${l}.svg`}
               height="2rem"
               width="3rem"
               style={{ width: "3rem", height: "2rem" }}
