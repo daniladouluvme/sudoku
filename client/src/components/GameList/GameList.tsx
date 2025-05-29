@@ -31,20 +31,22 @@ export const GameList = () => {
     <Loading loading={loading}>
       <CreateGameButton />
       <List>
-        {games.map((g) => (
-          <ListItemButton
-            key={g._id}
-            to={`/games/${g._id}`}
-            component={Link}
-            color="inherit"
-          >
-            <ListItemIcon>
-              <ExtensionIcon />
-            </ListItemIcon>
+        {games
+          .toSorted((a, b) => -a.date.localeCompare(b.date))
+          .map((g) => (
+            <ListItemButton
+              key={g._id}
+              to={`/games/${g._id}`}
+              component={Link}
+              color="inherit"
+            >
+              <ListItemIcon>
+                <ExtensionIcon />
+              </ListItemIcon>
 
-            <ListItemText primary={new Date(g.date).toLocaleString()} />
-          </ListItemButton>
-        ))}
+              <ListItemText primary={new Date(g.date).toLocaleString()} />
+            </ListItemButton>
+          ))}
       </List>
     </Loading>
   );
