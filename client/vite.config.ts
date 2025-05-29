@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   root: __dirname,
   plugins: [react()],
-  base: "./",
+  base: "/",
   build: {
     assetsDir: "./assets",
     outDir: "../build/dist",
