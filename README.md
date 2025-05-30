@@ -29,7 +29,7 @@ A mono repository is used to organize the code. [NX](https://nx.dev) is used to 
    1. **bunx nx run server:preview** - The script runs the backend in preview mode
    1. **bunx nx run server:copy-config** - The script copies the config template to the build
 1. **bun scripts**
-   1. **build:app** - The script creates an application build
+   1. **bun run build:app** - The script creates an application build
 
 ## Config
 
